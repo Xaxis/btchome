@@ -2,7 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import Icon from '../components/Icon.astro';
+import { runScenarios } from '@/services/scenarios';
+import { Models } from '@/services/models';
 ---
+
+<script>
+  // Expose scenario engine to the page script safely
+  import { runScenarios } from '@/services/scenarios';
+  window.runScenarios = runScenarios;
+</script>
+
 
 <BaseLayout title="BTCHome - Bitcoin vs Real Estate Investment Comparison">
 
@@ -121,14 +130,7 @@ import Icon from '../components/Icon.astro';
         </div>
       </div>
 
-      <!-- Smooth Transition Indicator -->
-      <div class="relative z-10 text-center pb-6 md:pb-8">
-        <div class="inline-flex items-center space-x-2 text-gray-500 dark:text-gray-400 text-sm">
-          <div class="w-2 h-2 bg-bitcoin-500 rounded-full animate-pulse"></div>
-          <span>Live calculator below</span>
-          <div class="w-2 h-2 bg-bitcoin-500 rounded-full animate-pulse"></div>
-        </div>
-      </div>
+
     </section>
 
 
@@ -207,28 +209,28 @@ import Icon from '../components/Icon.astro';
           </div>
 
           <!-- Desktop Layout (Horizontal) -->
-          <div class="hidden md:flex items-center justify-between gap-6">
+          <div class="hidden md:flex items-center justify-between gap-4 xl:gap-6 flex-wrap">
 
             <!-- Bitcoin Input (Prominent) -->
-            <div class="flex items-center space-x-4">
-              <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-3 xl:gap-4 flex-wrap">
+              <div class="flex items-center gap-2">
                 <Icon name="bitcoin" size="md" class="text-bitcoin-500" />
-                <span class="font-semibold text-gray-900 dark:text-white">Your Stack:</span>
+                <span class="font-semibold text-gray-900 dark:text-white whitespace-nowrap">Your Stack:</span>
               </div>
-              <div class="relative">
+              <div class="flex items-center bg-white dark:bg-gray-800 border-2 border-bitcoin-300 dark:border-bitcoin-700 rounded-xl overflow-hidden shadow-lg">
+                <span class="px-3 text-bitcoin-500 font-bold text-lg">₿</span>
                 <input
                   type="number"
                   id="btc-amount-main"
-                  class="w-32 px-4 py-2 text-xl font-mono text-center bg-white dark:bg-gray-800 border-2 border-bitcoin-300 dark:border-bitcoin-700 rounded-xl focus:ring-2 focus:ring-bitcoin-500 focus:border-bitcoin-500 transition-all shadow-lg"
+                  class="w-28 sm:w-32 md:w-36 px-3 py-2 text-xl font-mono text-center bg-transparent border-0 focus:ring-2 focus:ring-bitcoin-500 focus:border-transparent outline-none"
                   placeholder="1.5"
                   step="0.00000001"
                   value="1.5"
                 />
-                <div class="absolute -right-8 top-1/2 transform -translate-y-1/2 text-bitcoin-500 font-bold text-lg">₿</div>
               </div>
-              <div class="text-right">
-                <div id="btc-value-display" class="text-2xl font-bold text-gradient-bitcoin">$100,500</div>
-                <div class="text-xs text-gray-500">@ $67,000/BTC</div>
+              <div class="text-right min-w-[160px]">
+                <div id="btc-value-display" class="value-fit text-2xl font-bold text-gradient-bitcoin">$100,500</div>
+                <div class="text-xs text-gray-500">@ <span id="price-per-btc">$67,000</span>/BTC <span id="price-label" class="ml-1 text-gray-400">(current)</span></div>
               </div>
             </div>
 
@@ -250,6 +252,12 @@ import Icon from '../components/Icon.astro';
                   <Icon name="info" size="sm" />
                 </button>
               </div>
+            </div>
+
+            <!-- Advanced Mode Toggle -->
+            <div class="flex items-center gap-2">
+              <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Advanced</label>
+              <button id="toggle-advanced" class="px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition">Show</button>
             </div>
 
             <!-- Location Selector -->
@@ -590,6 +598,47 @@ import Icon from '../components/Icon.astro';
                   <div class="font-bold text-purple-600 dark:text-purple-400">2034</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">$3M+ home</div>
                   <div class="text-xs text-gray-500">Dream home</div>
+
+    <!-- Advanced Panel -->
+    <section id="advanced-panel" class="advanced-panel hidden mt-6 mb-2">
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Purchase -->
+        <div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">Purchase <button class="ml-2 p-1 text-gray-500 hover:text-bitcoin-500" data-tooltip="Define your home purchase assumptions: price, down payment, rate, term, taxes and insurance."><Icon name="info" size="sm" /></button></h4>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="text-sm">Price<input id="adv-home-price" type="number" class="input" placeholder="420000" value="420000" /></label>
+            <label class="text-sm">Down %<input id="adv-down-pct" type="number" class="input" placeholder="20" value="20" /></label>
+            <label class="text-sm">Rate %<input id="adv-rate" type="number" class="input" placeholder="7.0" value="7.0" step="0.01" /></label>
+            <label class="text-sm">Term yrs<input id="adv-term" type="number" class="input" placeholder="30" value="30" /></label>
+            <label class="text-sm">Tax %<input id="adv-tax" type="number" class="input" placeholder="1.2" value="1.2" step="0.01" /></label>
+            <label class="text-sm">Insurance $/yr<input id="adv-ins" type="number" class="input" placeholder="1500" value="1500" /></label>
+          </div>
+        </div>
+        <!-- Rent -->
+        <div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">Rent <button class="ml-2 p-1 text-gray-500 hover:text-bitcoin-500" data-tooltip="If renting instead of buying, set your rent costs."><Icon name="info" size="sm" /></button></h4>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="text-sm">Rent $/mo<input id="adv-rent" type="number" class="input" placeholder="2500" value="2500" /></label>
+            <label class="text-sm">Rent growth %<input id="adv-rent-growth" type="number" class="input" placeholder="0" value="0" step="0.5" /></label>
+          </div>
+        </div>
+        <!-- Bitcoin -->
+        <div>
+          <h4 class="font-semibold text-gray-900 dark:text-white mb-2 flex items-center">Bitcoin <button class="ml-2 p-1 text-gray-500 hover:text-bitcoin-500" data-tooltip="Optionally enter your cost basis for ROI insights."><Icon name="info" size="sm" /></button></h4>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="text-sm">Cost basis $/BTC<input id="adv-basis" type="number" class="input" placeholder="0" value="0" /></label>
+            <label class="text-sm">Timeframe yrs<input id="adv-years" type="number" class="input" placeholder="10" value="10" /></label>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
+        <div class="text-xs text-gray-500">Advanced settings power the three scenarios using the selected projection model.</div>
+        <div class="flex gap-2">
+          <button id="adv-reset" class="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700">Reset</button>
+          <button id="adv-apply" class="px-4 py-2 rounded-xl bg-bitcoin-500 text-white">Apply</button>
+        </div>
+      </div>
+    </section>
                 </div>
               </div>
             </div>
@@ -1000,37 +1049,27 @@ import Icon from '../components/Icon.astro';
       }
 
       updateModelPredictions(currentBtcValue) {
-        const models = ['power-law', 'stock-to-flow', 'rainbow-chart', 'halving-cycle'];
-        const predictions = models.map(modelKey => {
-          const model = this.models[modelKey];
-          const futurePrice = model.formula(this.currentTimeframe);
-          const futureValue = this.currentBtcAmount * futurePrice;
-          const roi = ((futureValue - currentBtcValue) / currentBtcValue) * 100;
-          return { modelKey, futureValue, roi };
-        });
+        // Use new scenario engine for coherent math
+        const inputs = {
+          btcAmount: this.currentBtcAmount,
+          btcPrice: this.btcPrice,
+          timeframeYears: this.currentTimeframe,
+          model: this.currentModel === 'stock-to-flow' ? 's2f' : (this.currentModel === 'rainbow-chart' ? 'log-regression' : (this.currentModel === 'halving-cycle' ? 'power-law' : this.currentModel)),
+          downPaymentPct: (document.getElementById('down-payment-slider')?.value || 20) / 100,
+          interestRate: 0.07,
+          mortgageYears: 30,
+          propertyTaxRate: 0.012,
+          insuranceAnnual: 1500,
+          rentAnnual: 30000,
+          appreciationRate: 0.03,
+        };
 
-        // Update the model prediction displays
-        predictions.forEach(({ modelKey, futureValue, roi }, index) => {
-          const elements = document.querySelectorAll('.bg-gradient-to-r');
-          if (elements[index]) {
-            const valueElement = elements[index].querySelector('.text-lg.font-bold');
-            const roiElement = elements[index].querySelector('.text-xs.text-green-500');
-            if (valueElement) valueElement.textContent = this.formatCurrency(futureValue);
-            if (roiElement) roiElement.textContent = `+${roi.toFixed(0)}%`;
-          }
-        });
+        const { futureBtcValue, buyHouseEquity, rentPlusBtcNet } = window.runScenarios(inputs);
 
-        // Update chart legend values
-        const selectedModel = this.models[this.currentModel];
-        const bitcoinFinalValue = this.currentBtcAmount * selectedModel.formula(this.currentTimeframe);
-        this.updateElement('bitcoin-final-value', this.formatCurrency(bitcoinFinalValue));
-
-        // Estimate house and rent scenarios
-        const houseEquity = currentBtcValue * 0.8 * Math.pow(1.03, this.currentTimeframe); // 3% appreciation
-        const rentBitcoinValue = currentBtcValue * 0.2 * selectedModel.formula(this.currentTimeframe) / this.btcPrice;
-
-        this.updateElement('house-final-value', this.formatCurrency(houseEquity));
-        this.updateElement('rent-bitcoin-final-value', this.formatCurrency(rentBitcoinValue));
+        // Update displays
+        this.updateElement('bitcoin-final-value', this.formatCurrency(futureBtcValue));
+        this.updateElement('house-final-value', this.formatCurrency(buyHouseEquity));
+        this.updateElement('rent-bitcoin-final-value', this.formatCurrency(rentPlusBtcNet));
       }
 
       calculateMortgagePayment(principal, rate, years) {
@@ -1180,28 +1219,24 @@ import Icon from '../components/Icon.astro';
         if (!this.chart) return;
 
         const years = Array.from({ length: this.currentTimeframe + 1 }, (_, i) => i);
-        const selectedModel = this.models[this.currentModel];
 
-        // Generate data for each scenario
-        const bitcoinData = years.map(year => {
-          const futurePrice = selectedModel.formula(year);
-          return this.currentBtcAmount * futurePrice;
-        });
+        const mapModelKey = (k) => k === 'stock-to-flow' ? 's2f' : (k === 'rainbow-chart' ? 'log-regression' : (k === 'halving-cycle' ? 'power-law' : k));
+        const baseInputs = {
+          btcAmount: this.currentBtcAmount,
+          btcPrice: this.btcPrice,
+          model: mapModelKey(this.currentModel),
+          downPaymentPct: (document.getElementById('down-payment-slider')?.value || 20) / 100,
+          interestRate: 0.07,
+          mortgageYears: 30,
+          propertyTaxRate: 0.012,
+          insuranceAnnual: 1500,
+          rentAnnual: 30000,
+          appreciationRate: 0.03,
+        };
 
-        const houseData = years.map(year => {
-          const initialEquity = this.currentBtcAmount * this.btcPrice * 0.2; // 20% down
-          const appreciation = Math.pow(1.03, year); // 3% annual appreciation
-          const principalPaydown = year * 5000; // Rough principal paydown
-          return initialEquity * appreciation + principalPaydown;
-        });
-
-        const rentBitcoinData = years.map(year => {
-          const rentCost = year * 30000; // $2,500/month rent
-          const remainingBitcoin = this.currentBtcAmount * 0.8; // Keep 80% of Bitcoin
-          const futurePrice = selectedModel.formula(year);
-          const bitcoinValue = remainingBitcoin * futurePrice;
-          return Math.max(0, bitcoinValue - rentCost);
-        });
+        const bitcoinData = years.map(year => runScenarios({ ...baseInputs, timeframeYears: year }).futureBtcValue);
+        const houseData = years.map(year => runScenarios({ ...baseInputs, timeframeYears: year }).buyHouseEquity);
+        const rentBitcoinData = years.map(year => runScenarios({ ...baseInputs, timeframeYears: year }).rentPlusBtcNet);
 
         // Update chart data
         this.chart.data.labels = years;
@@ -1229,8 +1264,98 @@ import Icon from '../components/Icon.astro';
         try {
           const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true');
           const data = await response.json();
+
+      // Toggle Advanced panel
+      const advPanel = document.getElementById('advanced-panel');
+      const advToggle = document.getElementById('toggle-advanced');
+      advToggle?.addEventListener('click', () => {
+        if (!advPanel) return;
+        const show = advPanel.classList.contains('hidden');
+        advPanel.classList.toggle('hidden', !show);
+        advToggle.textContent = show ? 'Hide' : 'Show';
+      });
+
+      // Apply / Reset Advanced settings
+      function getAdvancedInputs() {
+        const getNum = (id, d=0) => parseFloat((document.getElementById(id)?.value || d).toString()) || d;
+        return {
+          homePrice: getNum('adv-home-price', 420000),
+          downPct: getNum('adv-down-pct', 20) / 100,
+          rate: getNum('adv-rate', 7.0) / 100,
+          term: getNum('adv-term', 30),
+          taxRate: getNum('adv-tax', 1.2) / 100,
+          insurance: getNum('adv-ins', 1500),
+          rentMonthly: getNum('adv-rent', 2500),
+          rentGrowth: getNum('adv-rent-growth', 0) / 100,
+          basis: getNum('adv-basis', 0),
+          years: getNum('adv-years', this.currentTimeframe),
+        };
+      }
+
+      document.getElementById('adv-reset')?.addEventListener('click', () => {
+        ['adv-home-price','adv-down-pct','adv-rate','adv-term','adv-tax','adv-ins','adv-rent','adv-rent-growth','adv-basis','adv-years']
+          .forEach(id => { const el = document.getElementById(id); if (el) el.value = el.getAttribute('value') || ''; });
+      });
+
+      document.getElementById('adv-apply')?.addEventListener('click', () => {
+        const adv = getAdvancedInputs();
+        // Update current timeframe if changed
+        this.currentTimeframe = adv.years;
+        // Recompute using advanced params
+        const inputs = {
+          btcAmount: this.currentBtcAmount,
+          btcPrice: this.btcPrice,
+          timeframeYears: this.currentTimeframe,
+          model: (this.currentModel === 'stock-to-flow' ? 's2f' : (this.currentModel === 'rainbow-chart' ? 'log-regression' : (this.currentModel === 'halving-cycle' ? 'power-law' : this.currentModel))),
+          downPaymentPct: adv.downPct,
+          interestRate: adv.rate,
+          mortgageYears: adv.term,
+          propertyTaxRate: adv.taxRate,
+          insuranceAnnual: adv.insurance,
+          rentAnnual: adv.rentMonthly * 12,
+          appreciationRate: 0.03,
+        };
+        const res = window.runScenarios(inputs);
+        this.updateElement('bitcoin-final-value', this.formatCurrency(res.futureBtcValue));
+        this.updateElement('house-final-value', this.formatCurrency(res.buyHouseEquity));
+        this.updateElement('rent-bitcoin-final-value', this.formatCurrency(res.rentPlusBtcNet));
+        this.updateChart();
+      });
+
+      // Improved tooltips (adaptive width + arrow)
+      document.body.addEventListener('mouseenter', (e) => {
+        const t = e.target.closest('[data-tooltip]');
+        if (!t) return;
+        let b = t.querySelector(':scope > .tooltip-bubble');
+        if (!b) {
+          b = document.createElement('div');
+          b.className = 'tooltip-bubble';
+          b.innerHTML = `<div>${t.getAttribute('data-tooltip') || ''}</div><div class="tooltip-arrow"></div>`;
+          t.style.position = t.style.position || 'relative';
+          t.appendChild(b);
+        }
+        b.setAttribute('data-show','true');
+        const rect = t.getBoundingClientRect();
+        b.style.left = '50%';
+        b.style.transform = 'translateX(-50%)';
+        b.style.top = `${t.offsetHeight + 10}px`;
+        const arrow = b.querySelector('.tooltip-arrow');
+        if (arrow) {
+          arrow.style.left = 'calc(50% - 6px)';
+          arrow.style.top = '-6px';
+        }
+      }, true);
+      document.body.addEventListener('mouseleave', (e) => {
+        const t = e.target.closest('[data-tooltip]');
+        if (!t) return;
+        const b = t.querySelector(':scope > .tooltip-bubble');
+        if (b) b.setAttribute('data-show','false');
+      }, true);
+
           this.btcPrice = data.bitcoin.usd;
           this.btc24hChange = data.bitcoin.usd_24h_change || 2.3;
+          const priceEl = document.getElementById('price-per-btc');
+          if (priceEl) priceEl.textContent = this.formatCurrency(this.btcPrice);
           this.updateHeroPreview();
           this.updateCalculations();
           console.log('Bitcoin price updated:', this.btcPrice);

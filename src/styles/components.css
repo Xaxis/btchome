@@ -201,10 +201,22 @@
     @apply container-pro;
   }
 
-  /* Minimal tooltip styling */
+  /* Professional tooltip styling */
   .tooltip-bubble {
-    @apply absolute z-50 hidden px-3 py-2 text-xs md:text-sm rounded-lg shadow-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300;
-    max-width: 280px;
+    @apply absolute z-50 px-3 py-2 text-xs md:text-sm rounded-xl shadow-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300;
+    max-width: min(80vw, 340px);
+    white-space: normal;
+    line-height: 1.4;
+    display: none;
+  }
+  .tooltip-bubble[data-show="true"] { display: block; }
+  .tooltip-arrow {
+    @apply absolute w-3 h-3 bg-white dark:bg-gray-900 border-t border-l border-gray-200 dark:border-gray-700 rotate-45;
+  }
+
+  /* Advanced panel container */
+  .advanced-panel {
+    @apply container-pro bg-white/80 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl backdrop-blur-md;
   }
 
   .section-padding {
