@@ -1,0 +1,348 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  bitcoinResults: {
+    totalInvested: number;
+    currentValue: number;
+    roi: number;
+    totalBitcoin: number;
+  };
+  realEstateResults: {
+    homeValue: number;
+    totalCosts: number;
+    equity: number;
+    netCost: number;
+    monthlyPayment: number;
+  };
+  timeframe: number;
+  investmentAmount: number;
+}
+
+const { bitcoinResults, realEstateResults, timeframe, investmentAmount } = Astro.props;
+
+// Calculate key comparison metrics
+const bitcoinGain = bitcoinResults.currentValue - bitcoinResults.totalInvested;
+const realEstateGain = realEstateResults.homeValue - realEstateResults.totalCosts;
+const bitcoinWins = bitcoinResults.currentValue > realEstateResults.equity;
+const opportunityCost = Math.abs(bitcoinResults.currentValue - realEstateResults.equity);
+
+// Format currency
+const formatCurrency = (amount: number) => 
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount);
+
+// Format percentage
+const formatPercent = (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`;
+---
+
+<div class="space-y-12">
+  <!-- Header with Key Insight -->
+  <div class="text-center">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6" 
+         class:list={[bitcoinWins ? 'bg-bitcoin-100 dark:bg-bitcoin-900' : 'bg-green-100 dark:bg-green-900']}>
+      <Icon name={bitcoinWins ? 'bitcoin' : 'home'} size="xl" 
+            class={bitcoinWins ? 'text-bitcoin-500' : 'text-green-500'} />
+    </div>
+    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+      {bitcoinWins ? 'Bitcoin' : 'Real Estate'} Wins by 
+      <span class={bitcoinWins ? 'text-gradient-bitcoin' : 'text-green-500'}>
+        {formatCurrency(opportunityCost)}
+      </span>
+    </h2>
+    <p class="text-xl text-gray-600 dark:text-gray-400">
+      Over {timeframe} years with {formatCurrency(investmentAmount)} invested
+    </p>
+  </div>
+
+  <!-- Side-by-Side Comparison Cards -->
+  <div class="grid lg:grid-cols-2 gap-8">
+    <!-- Bitcoin Results -->
+    <div class="card border-2 border-bitcoin-200 dark:border-bitcoin-800">
+      <div class="card-header bg-bitcoin-50 dark:bg-bitcoin-900/20">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <Icon name="bitcoin" size="lg" class="text-bitcoin-500" />
+            <h3 class="text-2xl font-bold text-bitcoin-600 dark:text-bitcoin-400">Bitcoin Investment</h3>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-bitcoin-600 dark:text-bitcoin-400">
+              {formatCurrency(bitcoinResults.currentValue)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Current Value</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body space-y-6">
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">
+              {formatCurrency(bitcoinResults.totalInvested)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Invested</div>
+          </div>
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div class="text-2xl font-bold" class:list={[bitcoinResults.roi > 0 ? 'text-green-500' : 'text-red-500']}>
+              {formatPercent(bitcoinResults.roi)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Return on Investment</div>
+          </div>
+        </div>
+
+        <!-- Bitcoin Holdings -->
+        <div class="bg-bitcoin-50 dark:bg-bitcoin-900/20 p-4 rounded-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Bitcoin Holdings</span>
+            <span class="font-mono text-lg font-semibold text-bitcoin-600 dark:text-bitcoin-400">
+              ₿ {bitcoinResults.totalBitcoin.toFixed(6)}
+            </span>
+          </div>
+        </div>
+
+        <!-- Gain/Loss -->
+        <div class="border-t pt-4">
+          <div class="flex items-center justify-between text-lg">
+            <span class="text-gray-700 dark:text-gray-300">Net Gain/Loss</span>
+            <span class="font-bold" class:list={[bitcoinGain > 0 ? 'text-green-500' : 'text-red-500']}>
+              {bitcoinGain > 0 ? '+' : ''}{formatCurrency(bitcoinGain)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real Estate Results -->
+    <div class="card border-2 border-green-200 dark:border-green-800">
+      <div class="card-header bg-green-50 dark:bg-green-900/20">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <Icon name="home" size="lg" class="text-green-500" />
+            <h3 class="text-2xl font-bold text-green-600 dark:text-green-400">Real Estate Investment</h3>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-green-600 dark:text-green-400">
+              {formatCurrency(realEstateResults.homeValue)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Home Value</div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body space-y-6">
+        <!-- Key Metrics -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div class="text-2xl font-bold text-gray-900 dark:text-white">
+              {formatCurrency(realEstateResults.totalCosts)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Total Costs</div>
+          </div>
+          <div class="text-center p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div class="text-2xl font-bold text-green-500">
+              {formatCurrency(realEstateResults.equity)}
+            </div>
+            <div class="text-sm text-gray-600 dark:text-gray-400">Your Equity</div>
+          </div>
+        </div>
+
+        <!-- Monthly Payment -->
+        <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Monthly Payment</span>
+            <span class="font-mono text-lg font-semibold text-green-600 dark:text-green-400">
+              {formatCurrency(realEstateResults.monthlyPayment)}/mo
+            </span>
+          </div>
+        </div>
+
+        <!-- Net Position -->
+        <div class="border-t pt-4">
+          <div class="flex items-center justify-between text-lg">
+            <span class="text-gray-700 dark:text-gray-300">Net Position</span>
+            <span class="font-bold" class:list={[realEstateGain > 0 ? 'text-green-500' : 'text-red-500']}>
+              {realEstateGain > 0 ? '+' : ''}{formatCurrency(realEstateGain)}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunity Cost Analysis -->
+  <div class="card bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-200 dark:border-gray-700">
+    <div class="card-body">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
+        <Icon name="compare" size="lg" class="text-blue-500 mr-3" />
+        Opportunity Cost Analysis
+      </h3>
+      
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-blue-500 mb-2">
+            {formatCurrency(opportunityCost)}
+          </div>
+          <div class="text-gray-600 dark:text-gray-400">
+            Opportunity Cost
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            What you {bitcoinWins ? 'saved' : 'missed'} by choosing {bitcoinWins ? 'Bitcoin' : 'Real Estate'}
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <div class="text-3xl font-bold text-purple-500 mb-2">
+            {timeframe} years
+          </div>
+          <div class="text-gray-600 dark:text-gray-400">
+            Investment Period
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            Time horizon for this comparison
+          </div>
+        </div>
+        
+        <div class="text-center">
+          <div class="text-3xl font-bold text-orange-500 mb-2">
+            {Math.abs(bitcoinResults.roi - ((realEstateResults.homeValue - realEstateResults.totalCosts) / realEstateResults.totalCosts * 100)).toFixed(1)}%
+          </div>
+          <div class="text-gray-600 dark:text-gray-400">
+            Performance Gap
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            Difference in returns between strategies
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What If Scenarios -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+        <Icon name="trending" size="lg" class="text-indigo-500 mr-3" />
+        What If Scenarios
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="p-4 bg-bitcoin-50 dark:bg-bitcoin-900/20 rounded-lg">
+          <h4 class="font-semibold text-bitcoin-600 dark:text-bitcoin-400 mb-2">
+            If you used Bitcoin gains for down payment:
+          </h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Your {formatCurrency(bitcoinResults.currentValue)} Bitcoin stack could cover a 
+            {formatCurrency(bitcoinResults.currentValue / 0.2)} home with 20% down.
+          </p>
+        </div>
+        
+        <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+          <h4 class="font-semibold text-green-600 dark:text-green-400 mb-2">
+            If you rented and invested the difference:
+          </h4>
+          <p class="text-gray-700 dark:text-gray-300">
+            Investing {formatCurrency(realEstateResults.monthlyPayment)}/month in Bitcoin 
+            could have yielded different results.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Chart -->
+  <div class="card">
+    <div class="card-header">
+      <h3 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
+        <Icon name="chart" size="lg" class="text-blue-500 mr-3" />
+        Performance Over Time
+      </h3>
+    </div>
+    <div class="card-body">
+      <div class="chart-container">
+        <canvas id="performance-chart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Chart.js integration will be added here
+  import { Chart, registerables } from 'chart.js';
+  import 'chartjs-adapter-date-fns';
+
+  Chart.register(...registerables);
+
+  // Initialize chart when component loads
+  document.addEventListener('DOMContentLoaded', () => {
+    const ctx = document.getElementById('performance-chart') as HTMLCanvasElement;
+    if (!ctx) return;
+
+    // Sample data - in real implementation, this would come from props
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        datasets: [
+          {
+            label: 'Bitcoin Investment',
+            data: [], // Will be populated with real data
+            borderColor: '#ed7611',
+            backgroundColor: 'rgba(237, 118, 17, 0.1)',
+            tension: 0.4,
+          },
+          {
+            label: 'Real Estate Equity',
+            data: [], // Will be populated with real data
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            tension: 0.4,
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'year'
+            },
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Value ($)'
+            },
+            ticks: {
+              callback: function(value) {
+                return '$' + value.toLocaleString();
+              }
+            }
+          }
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false
+        }
+      }
+    });
+  });
+</script>
