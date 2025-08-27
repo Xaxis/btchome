@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { runScenarios } from '@/services/scenarios';
 ---
 
 <BaseLayout title="BTCHome – Model Buying vs Renting vs Stacking Bitcoin">
@@ -79,17 +78,17 @@ import { runScenarios } from '@/services/scenarios';
 
         <!-- Carousel Navigation -->
         <div class="flex border-b border-gray-200 dark:border-gray-800">
-          <button class="carousel-tab active flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-bitcoin-500 text-bitcoin-600 dark:text-bitcoin-400" data-tab="home">
+          <button class="carousel-tab active flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-bitcoin-500 text-bitcoin-600 dark:text-bitcoin-400" data-tab="bitcoin">
+            <Icon name="bitcoin" size="sm" class="inline mr-2" />
+            Bitcoin
+          </button>
+          <button class="carousel-tab flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" data-tab="home">
             <Icon name="home" size="sm" class="inline mr-2" />
-            Home Purchase
+            Home
           </button>
           <button class="carousel-tab flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" data-tab="rent">
             <Icon name="home" size="sm" class="inline mr-2" />
             Rent Alternative
-          </button>
-          <button class="carousel-tab flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" data-tab="bitcoin">
-            <Icon name="bitcoin" size="sm" class="inline mr-2" />
-            Bitcoin & Market
           </button>
           <button class="carousel-tab flex-1 px-4 py-3 text-sm font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" data-tab="location">
             <Icon name="location" size="sm" class="inline mr-2" />
@@ -99,8 +98,46 @@ import { runScenarios } from '@/services/scenarios';
 
         <!-- Carousel Content -->
         <div class="p-6">
+          <!-- Bitcoin Tab -->
+          <div id="tab-bitcoin" class="carousel-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current BTC Price $</label>
+                <div class="relative">
+                  <input id="btc-price-override" type="number" class="input w-full pr-16" value="67000" />
+                  <button id="refresh-price" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-bitcoin-500 transition-colors">
+                    <Icon name="refresh" size="sm" />
+                  </button>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Live price from CoinGecko (click refresh to update)</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">DCA Amount $</label>
+                <div class="flex gap-2 w-full">
+                  <input id="dca-amount" type="number" class="input flex-1 min-w-0" value="0" min="0" max="50000" placeholder="0" />
+                  <select id="dca-period" class="input w-16 flex-shrink-0 text-xs">
+                    <option value="weekly">week</option>
+                    <option value="monthly" selected>month</option>
+                    <option value="quarterly">qtr</option>
+                  </select>
+                </div>
+                <p class="text-xs text-gray-500 mt-1">Regular dollar-cost averaging into Bitcoin</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Capital Gains Tax %</label>
+                <input id="tax-rate-btc" type="number" class="input w-full" value="20" step="0.1" min="0" max="50" />
+                <p class="text-xs text-gray-500 mt-1">Tax rate when selling Bitcoin for down payment (reduces available funds)</p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Model Confidence %</label>
+                <input id="model-confidence" type="number" class="input w-full" value="100" min="50" max="150" />
+                <p class="text-xs text-gray-500 mt-1">Adjust projection model aggressiveness (50-150%)</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Home Purchase Tab -->
-          <div id="tab-home" class="carousel-content">
+          <div id="tab-home" class="carousel-content hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Purchase Price</label>
@@ -179,36 +216,7 @@ import { runScenarios } from '@/services/scenarios';
             </div>
           </div>
 
-          <!-- Bitcoin & Market Tab -->
-          <div id="tab-bitcoin" class="carousel-content hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cost Basis $/BTC</label>
-                <input id="cost-basis" type="number" class="input w-full" value="0" />
-                <p class="text-xs text-gray-500 mt-1">Your average purchase price (optional)</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">DCA Amount $/month</label>
-                <input id="dca-amount" type="number" class="input w-full" value="0" />
-                <p class="text-xs text-gray-500 mt-1">Monthly dollar-cost averaging</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tax Rate on Gains %</label>
-                <input id="tax-rate-btc" type="number" class="input w-full" value="20" />
-                <p class="text-xs text-gray-500 mt-1">Capital gains tax rate</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Inflation Rate %</label>
-                <input id="inflation" type="number" class="input w-full" value="3" step="0.1" />
-                <p class="text-xs text-gray-500 mt-1">Expected annual inflation</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Stock Market Return %</label>
-                <input id="stock-return" type="number" class="input w-full" value="7" step="0.1" />
-                <p class="text-xs text-gray-500 mt-1">Alternative investment benchmark</p>
-              </div>
-            </div>
-          </div>
+
 
           <!-- Location Presets Tab -->
           <div id="tab-location" class="carousel-content hidden">
@@ -246,7 +254,7 @@ import { runScenarios } from '@/services/scenarios';
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-bitcoin-500 rounded"></div>
               <span class="text-sm font-medium text-bitcoin-700 dark:text-bitcoin-300">Hold All Bitcoin</span>
-              <button class="p-1 text-gray-400 hover:text-bitcoin-500" data-tooltip="Keep all Bitcoin, never buy house">
+              <button class="p-1 text-gray-400 hover:text-bitcoin-500 transition-colors" data-modal="hold-bitcoin-info">
                 <Icon name="info" size="sm" />
               </button>
             </div>
@@ -263,7 +271,7 @@ import { runScenarios } from '@/services/scenarios';
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-green-500 rounded"></div>
               <span class="text-sm font-medium text-green-700 dark:text-green-300">Buy House <span id="timing-label">Now</span></span>
-              <button class="p-1 text-gray-400 hover:text-green-500" data-tooltip="Spend BTC on house at selected timing">
+              <button class="p-1 text-gray-400 hover:text-green-500 transition-colors" data-modal="buy-house-info">
                 <Icon name="info" size="sm" />
               </button>
             </div>
@@ -280,7 +288,7 @@ import { runScenarios } from '@/services/scenarios';
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-blue-500 rounded"></div>
               <span class="text-sm font-medium text-blue-700 dark:text-blue-300">Rent Forever</span>
-              <button class="p-1 text-gray-400 hover:text-blue-500" data-tooltip="Keep all Bitcoin, pay rent from other income">
+              <button class="p-1 text-gray-400 hover:text-blue-500 transition-colors" data-modal="rent-forever-info">
                 <Icon name="info" size="sm" />
               </button>
             </div>
@@ -297,7 +305,7 @@ import { runScenarios } from '@/services/scenarios';
             <div class="flex items-center gap-2">
               <div class="w-3 h-3 bg-red-500 rounded"></div>
               <span class="text-sm font-medium text-red-700 dark:text-red-300">Lost Opportunity</span>
-              <button class="p-1 text-gray-400 hover:text-red-500" data-tooltip="What you give up by not choosing the optimal strategy">
+              <button class="p-1 text-gray-400 hover:text-red-500 transition-colors" data-modal="opportunity-cost-info">
                 <Icon name="info" size="sm" />
               </button>
             </div>
@@ -536,388 +544,554 @@ import { runScenarios } from '@/services/scenarios';
     </div>
   </footer>
 
+  <!-- Info Modals -->
+  <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+      <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="modal-title" class="text-xl font-semibold text-gray-900 dark:text-white"></h3>
+          <button id="modal-close" class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <Icon name="close" size="md" />
+          </button>
+        </div>
+        <div id="modal-content" class="prose prose-sm dark:prose-invert max-w-none">
+          <!-- Dynamic content will be inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.js"></script>
   <script>
-    // Clean separation: Bitcoin price models
+    // ===== BITCOIN PRICE API =====
+    const BitcoinAPI = {
+      async getCurrentPrice() {
+        try {
+          const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+          const data = await response.json();
+          return data.bitcoin.usd;
+        } catch (error) {
+          console.error('Failed to fetch Bitcoin price:', error);
+          return 67000; // Fallback price
+        }
+      },
+
+      async initializePrice() {
+        const currentPrice = await this.getCurrentPrice();
+        AppState.btcPrice = currentPrice;
+
+        // Update UI elements
+        const btcPriceEl = document.getElementById('btc-price');
+        const btcPriceOverrideEl = document.getElementById('btc-price-override');
+        const btcValueEl = document.getElementById('btc-value');
+
+        if (btcPriceEl) btcPriceEl.textContent = '$' + currentPrice.toLocaleString();
+        if (btcPriceOverrideEl) btcPriceOverrideEl.value = currentPrice;
+        if (btcValueEl) btcValueEl.textContent = Utils.formatCurrency(AppState.btcAmount * currentPrice);
+
+        // Trigger update
+        UIManager.updateAll();
+      }
+    };
+
+    // ===== BITCOIN PRICE MODELS =====
+    const BitcoinModels = {
+      // Michael Saylor's Digital Energy Model
+      saylor: (years, price) => {
+        const energyGrowth = Math.pow(1.15, years);
+        const networkGrowth = Math.pow(1.25, years);
+        const scarcityPremium = Math.pow(1.20, years);
+        const multiplier = energyGrowth * Math.sqrt(networkGrowth) * scarcityPremium;
+        const diminishing = years > 10 ? Math.pow(0.98, years - 10) : 1;
+        return price * multiplier * diminishing;
+      },
+
+      // Giovanni Santostasi Power Law
+      'power-law': (years, price) => {
+        const genesisDate = new Date('2009-01-03');
+        const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
+        const futureDays = currentDays + (years * 365.25);
+        const n = 5.8;
+        const A = price / Math.pow(currentDays, n);
+        const result = A * Math.pow(futureDays, n);
+        return Math.min(result, price * 1000);
+      },
+
+      // Rainbow Chart Log Regression
+      'log-regression': (years, price) => {
+        const genesisDate = new Date('2009-01-03');
+        const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
+        const futureDays = currentDays + (years * 365.25);
+        const a = 2.9;
+        const b = Math.log10(price) - a * Math.log10(currentDays);
+        return Math.pow(10, a * Math.log10(futureDays) + b);
+      },
+
+      // PlanB Stock-to-Flow
+      's2f': (years, price) => {
+        const currentS2F = 56;
+        const halvings = Math.floor(years / 4);
+        const futureS2F = currentS2F * Math.pow(2, halvings);
+        const k = 3.3;
+        const c = Math.log(price) - k * Math.log(currentS2F);
+        return Math.exp(k * Math.log(futureS2F) + c);
+      },
+
+      // Metcalfe's Law Network Effects
+      metcalfe: (years, price) => {
+        const networkGrowth = Math.pow(1.20, years);
+        const valueMultiplier = Math.pow(networkGrowth, 2);
+        return price * valueMultiplier * Math.pow(0.95, years);
+      },
+
+      // Rainbow Chart Alternative
+      rainbow: (years, price) => {
+        const genesisDate = new Date('2009-01-03');
+        const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
+        const futureDays = currentDays + (years * 365.25);
+        const logPrice = 2.52 * Math.log10(futureDays) - 17.01;
+        const calibration = price / Math.pow(10, 2.52 * Math.log10(currentDays) - 17.01);
+        return Math.pow(10, logPrice) * calibration;
+      },
+
+      // PlanB Cross Asset Model
+      'plan-b': (years, price) => {
+        const monthsFromGenesis = ((Date.now() - new Date('2009-01-03').getTime()) / (1000 * 60 * 60 * 24 * 30.44)) + (years * 12);
+        const s2f = 25.8 * Math.pow(monthsFromGenesis / 12, 0.18);
+        return Math.exp(-1.84 + 3.36 * Math.log(s2f));
+      }
+    };
+
+
+    // Bitcoin price calculation with confidence adjustment
     function getBitcoinPrice(model, years, currentPrice) {
-      // Validate inputs
       if (!years || years < 0 || !currentPrice || currentPrice <= 0) {
-        console.error('Invalid inputs to getBitcoinPrice:', { model, years, currentPrice });
         return currentPrice;
       }
 
-      const models = {
-        'saylor': (y, price) => {
-          const energyGrowth = Math.pow(1.15, y);
-          const networkGrowth = Math.pow(1.25, y);
-          const scarcityPremium = Math.pow(1.20, y);
-          const multiplier = energyGrowth * Math.sqrt(networkGrowth) * scarcityPremium;
-          const diminishing = y > 10 ? Math.pow(0.98, y - 10) : 1;
-          return price * multiplier * diminishing;
-        },
-        'power-law': (y, price) => {
-          const genesisDate = new Date('2009-01-03');
-          const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
-          const futureDays = currentDays + (y * 365.25);
-          const n = 5.8;
-          const A = price / Math.pow(currentDays, n);
-          const result = A * Math.pow(futureDays, n);
-          return Math.min(result, price * 1000); // Cap at 1000x
-        },
-        'log-regression': (y, price) => {
-          const genesisDate = new Date('2009-01-03');
-          const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
-          const futureDays = currentDays + (y * 365.25);
-          const a = 2.9;
-          const b = Math.log10(price) - a * Math.log10(currentDays);
-          return Math.pow(10, a * Math.log10(futureDays) + b);
-        },
-        's2f': (y, price) => {
-          const currentS2F = 56;
-          const halvings = Math.floor(y / 4);
-          const futureS2F = currentS2F * Math.pow(2, halvings);
-          const k = 3.3;
-          const c = Math.log(price) - k * Math.log(currentS2F);
-          return Math.exp(k * Math.log(futureS2F) + c);
-        },
-        'metcalfe': (y, price) => {
-          const networkGrowth = Math.pow(1.20, y);
-          const valueMultiplier = Math.pow(networkGrowth, 2);
-          return price * valueMultiplier * Math.pow(0.95, y);
-        },
-        'rainbow': (y, price) => {
-          const genesisDate = new Date('2009-01-03');
-          const currentDays = (Date.now() - genesisDate.getTime()) / (1000 * 60 * 60 * 24);
-          const futureDays = currentDays + (y * 365.25);
-          const logPrice = 2.52 * Math.log10(futureDays) - 17.01;
-          const calibration = price / Math.pow(10, 2.52 * Math.log10(currentDays) - 17.01);
-          return Math.pow(10, logPrice) * calibration;
-        },
-        'plan-b': (y, price) => {
-          const monthsFromGenesis = ((Date.now() - new Date('2009-01-03').getTime()) / (1000 * 60 * 60 * 24 * 30.44)) + (y * 12);
-          const s2f = 25.8 * Math.pow(monthsFromGenesis / 12, 0.18);
-          return Math.exp(-1.84 + 3.36 * Math.log(s2f));
+      const modelFn = BitcoinModels[model] || BitcoinModels.saylor;
+      const baseResult = modelFn(years, currentPrice);
+
+      // Apply model confidence adjustment
+      const confidence = AppState.prefs?.modelConfidence || 1.0;
+      const adjustedGrowth = Math.pow(baseResult / currentPrice, confidence);
+      const result = currentPrice * adjustedGrowth;
+
+      // Validate and return
+      return isFinite(result) && result > 0 ? result : currentPrice * Math.pow(1.12, years);
+    }
+
+    // ===== FINANCIAL CALCULATIONS =====
+    const FinancialCalc = {
+      // Mortgage payment calculation
+      mortgage: (principal, rate, years) => {
+        if (!principal || !rate || !years || principal <= 0 || rate < 0 || years <= 0) {
+          return { monthlyPayment: 0, totalPayments: 0 };
         }
-      };
 
-      const modelFn = models[model] || models['saylor'];
-      const result = modelFn(years, currentPrice);
+        const monthlyRate = rate / 12;
+        const numPayments = years * 12;
 
-      // Validate output
-      if (!isFinite(result) || result <= 0) {
-        console.error('Invalid model output:', { model, years, currentPrice, result });
-        return currentPrice * Math.pow(1.12, years); // Fallback to 12% growth
-      }
+        if (rate === 0) {
+          return {
+            monthlyPayment: principal / numPayments,
+            totalPayments: principal
+          };
+        }
 
-      return result;
-    }
+        const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) /
+          (Math.pow(1 + monthlyRate, numPayments) - 1);
 
-    // Clean separation: Financial calculations
-    function calculateMortgage(principal, rate, years) {
-      if (!principal || !rate || !years || principal <= 0 || rate < 0 || years <= 0) {
-        console.error('Invalid mortgage inputs:', { principal, rate, years });
-        return { monthlyPayment: 0, totalPayments: 0 };
-      }
-
-      const monthlyRate = rate / 12;
-      const numPayments = years * 12;
-
-      if (rate === 0) {
         return {
-          monthlyPayment: principal / numPayments,
-          totalPayments: principal
+          monthlyPayment,
+          totalPayments: monthlyPayment * numPayments
         };
-      }
+      },
 
-      const monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+      // DCA accumulation calculation with flexible periods
+      dcaAccumulation: (dcaAmount, dcaPeriod, timeframeYears, model, btcPrice) => {
+        if (!dcaAmount || dcaAmount <= 0) return 0;
 
-      return {
-        monthlyPayment: monthlyPayment,
-        totalPayments: monthlyPayment * numPayments
-      };
-    }
-
-    // Clean separation: Scenario analysis
-    function runTimingAnalysis(inputs) {
-      const {
-        btcAmount, btcPrice, timeframeYears, model, purchaseTiming,
-        downPaymentPct, interestRate, mortgageYears,
-        appreciationRate, homePrice, rentAnnual
-      } = inputs;
-
-      // Validate all inputs
-      if (!btcAmount || !btcPrice || !timeframeYears || btcAmount <= 0 || btcPrice <= 0 || timeframeYears <= 0) {
-        console.error('Invalid scenario inputs:', inputs);
-        return {
-          holdAllValue: 0,
-          buyHouseValue: 0,
-          rentForeverValue: 0,
-          error: 'Invalid inputs'
+        // Convert period to frequency per year
+        const periodsPerYear = {
+          'weekly': 52,
+          'monthly': 12,
+          'quarterly': 4
         };
+
+        const frequency = periodsPerYear[dcaPeriod] || 12;
+        const totalPeriods = timeframeYears * frequency;
+
+        let totalBtc = 0;
+        for (let period = 0; period < totalPeriods; period++) {
+          const yearFraction = period / frequency;
+          const btcPriceAtPeriod = getBitcoinPrice(model, yearFraction, btcPrice);
+          totalBtc += dcaAmount / btcPriceAtPeriod;
+        }
+        return totalBtc;
+      },
+
+      // Rent cost calculation with growth
+      rentCosts: (inputs, timeframeYears) => {
+        let totalCosts = 0;
+        for (let year = 0; year < timeframeYears; year++) {
+          const yearlyRent = inputs.rentAnnual * Math.pow(1 + inputs.rentGrowthRate, year);
+          const yearlyInsurance = inputs.rentersInsurance || 0;
+          const movingCost = year % (inputs.movingFrequency || 3) === 0 ? (inputs.movingCosts || 0) : 0;
+          totalCosts += yearlyRent + yearlyInsurance + movingCost;
+        }
+        return totalCosts;
       }
-
-      // Parse purchase timing
-      const timingMap = {
-        'now': 0, 'year-1': 1, 'year-2': 2, 'year-3': 3, 'year-5': 5
-      };
-      const purchaseYear = timingMap[purchaseTiming] || 0;
-
-      // Scenario 1: Hold all Bitcoin (baseline)
-      const finalBtcPrice = getBitcoinPrice(model, timeframeYears, btcPrice);
-      const holdAllValue = btcAmount * finalBtcPrice;
-
-      // Scenario 2: Buy house at specific timing
-      const purchaseBtcPrice = getBitcoinPrice(model, purchaseYear, btcPrice);
-      const requiredDownPayment = homePrice * downPaymentPct;
-      const btcNeededForDown = requiredDownPayment / purchaseBtcPrice;
-
-      // Check if we have enough BTC at purchase time
-      if (btcNeededForDown > btcAmount) {
-        return {
-          holdAllValue,
-          buyHouseValue: 0,
-          rentForeverValue: holdAllValue - (rentAnnual * timeframeYears),
-          opportunityCosts: { holdAll: 0, buyHouse: holdAllValue, rentForever: 0 },
-          error: 'Insufficient Bitcoin for down payment',
-          btcSpent: btcNeededForDown,
-          btcRemaining: 0
-        };
-      }
-
-      const btcRemaining = btcAmount - btcNeededForDown;
-      const yearsOfOwnership = Math.max(0, timeframeYears - purchaseYear);
-
-      // Calculate house value at end
-      const futureHomeValue = homePrice * Math.pow(1 + appreciationRate, yearsOfOwnership);
-
-      // Calculate mortgage details
-      const loanAmount = homePrice - requiredDownPayment;
-      const mortgage = calculateMortgage(loanAmount, interestRate, mortgageYears);
-
-      // Calculate remaining mortgage balance after ownership period
-      const paymentsRemaining = Math.max(0, (mortgageYears * 12) - (yearsOfOwnership * 12));
-      let remainingBalance = 0;
-
-      if (paymentsRemaining > 0 && yearsOfOwnership > 0) {
-        const monthlyRate = interestRate / 12;
-        const paymentsMade = yearsOfOwnership * 12;
-        remainingBalance = loanAmount * Math.pow(1 + monthlyRate, paymentsMade) -
-          mortgage.monthlyPayment * ((Math.pow(1 + monthlyRate, paymentsMade) - 1) / monthlyRate);
-        remainingBalance = Math.max(0, remainingBalance);
-      }
-
-      const homeEquity = Math.max(0, futureHomeValue - remainingBalance);
-
-      // Value of remaining Bitcoin at end
-      const remainingBtcValue = btcRemaining * finalBtcPrice;
-
-      // Total wealth from buying house
-      const buyHouseValue = homeEquity + remainingBtcValue;
-
-      // Scenario 3: Rent forever + keep all Bitcoin
-      const totalRentPaid = rentAnnual * timeframeYears;
-      const rentForeverValue = holdAllValue - totalRentPaid;
-
-      // Calculate opportunity costs for each strategy
-      const allValues = [holdAllValue, buyHouseValue, rentForeverValue].filter(v => isFinite(v) && v > 0);
-      const maxValue = Math.max(...allValues);
-
-      const opportunityCosts = {
-        holdAll: maxValue - holdAllValue,
-        buyHouse: maxValue - buyHouseValue,
-        rentForever: maxValue - rentForeverValue
-      };
-
-      return {
-        holdAllValue: holdAllValue || 0,
-        buyHouseValue: buyHouseValue || 0,
-        rentForeverValue: rentForeverValue || 0,
-        opportunityCosts,
-        maxValue,
-        btcSpent: btcNeededForDown || 0,
-        btcRemaining: btcRemaining || 0,
-        purchaseBtcPrice: purchaseBtcPrice || btcPrice,
-        homeEquity: homeEquity || 0,
-        remainingBtcValue: remainingBtcValue || 0,
-        monthlyPayment: mortgage.monthlyPayment || 0,
-        monthlyRent: (rentAnnual || 0) / 12,
-        yearsOfOwnership: yearsOfOwnership || 0
-      };
-    }
-    // State
-    let btcPrice = 67000;
-    let btcAmount = 1.5;
-    let model = 'saylor';
-    let years = 10;
-    let purchaseTiming = 'now';
-    let prefs = {
-      homePrice: 420000,
-      downPct: 0.20,
-      rate: 0.07,
-      term: 30,
-      taxRate: 0.012,
-      insurance: 1500,
-      hoa: 0,
-      appreciation: 0.03,
-      maintenance: 0.01,
-      rent: 2500,
-      rentGrowth: 0.03,
-      securityDeposit: 2,
-      movingCosts: 2000,
-      costBasis: 0,
-      dcaAmount: 0,
-      taxRateBtc: 0.20,
-      inflation: 0.03,
-      stockReturn: 0.07
     };
 
-    function formatCurrency(amount) {
-      const abs = Math.abs(amount);
-      const sign = amount < 0 ? '-' : '';
-      if (abs >= 1e9) return sign + '$' + (abs/1e9).toFixed(1) + 'B';
-      if (abs >= 1e6) return sign + '$' + (abs/1e6).toFixed(1) + 'M';
-      if (abs >= 1e3) return sign + '$' + (abs/1e3).toFixed(0) + 'K';
-      return sign + '$' + abs.toLocaleString();
-    }
+    // Helper function: Calculate DCA accumulation
+    function calculateDcaAccumulation(dcaAmount, timeframeYears, model, btcPrice) {
+      if (!dcaAmount || dcaAmount <= 0) return 0;
 
-    function compute(yearsOverride = years) {
-      const inputs = {
-        btcAmount, btcPrice, timeframeYears: yearsOverride, model, purchaseTiming,
-        downPaymentPct: prefs.downPct,
-        interestRate: prefs.rate,
-        mortgageYears: prefs.term,
-        propertyTaxRate: prefs.taxRate,
-        insuranceAnnual: prefs.insurance,
-        appreciationRate: prefs.appreciation,
-        homePrice: prefs.homePrice
-      };
-      return runTimingAnalysis(inputs);
-    }
-
-    // Chart state
-    let chartView = 'absolute'; // 'absolute', 'relative', 'percentage'
-    let visibleSeries = { hodl: true, buy: true, rent: true, opportunity: true };
-
-    function updateAll() {
-      const res = compute();
-
-      // Validate results
-      if (!res || res.error) {
-        console.error('Computation error:', res?.error);
-        return;
+      let totalDcaBtc = 0;
+      for (let year = 0; year < timeframeYears; year++) {
+        for (let month = 0; month < 12; month++) {
+          const monthFraction = year + month/12;
+          const btcPriceAtMonth = getBitcoinPrice(model, monthFraction, btcPrice);
+          totalDcaBtc += dcaAmount / btcPriceAtMonth;
+        }
       }
-
-      // Update KPIs with validation
-      const hodlEl = document.getElementById('kpi-hodl');
-      const buyEl = document.getElementById('kpi-buy');
-      const rentEl = document.getElementById('kpi-rent');
-      const oppEl = document.getElementById('kpi-opportunity');
-
-      if (hodlEl) hodlEl.textContent = formatCurrency(res.holdAllValue || 0);
-      if (buyEl) buyEl.textContent = formatCurrency(res.buyHouseValue || 0);
-      if (rentEl) rentEl.textContent = formatCurrency(res.rentForeverValue || 0);
-
-      // Calculate and display worst strategy's opportunity cost
-      const worstStrategy = getCurrentWorstStrategy(res);
-      const worstOpportunityCost = res.opportunityCosts[worstStrategy] || 0;
-      if (oppEl) oppEl.textContent = formatCurrency(-worstOpportunityCost);
-
-      // Update timing label
-      const timingLabels = {
-        'now': 'Now', 'year-1': 'Year 1', 'year-2': 'Year 2',
-        'year-3': 'Year 3', 'year-5': 'Year 5'
-      };
-      const timingEl = document.getElementById('timing-label');
-      if (timingEl) timingEl.textContent = timingLabels[purchaseTiming] || 'Now';
-
-      updateChart();
-      updateInsights(res);
+      return totalDcaBtc;
     }
 
-    function getCurrentWorstStrategy(res) {
-      const strategies = [
-        { name: 'holdAll', value: res.holdAllValue || 0 },
-        { name: 'buyHouse', value: res.buyHouseValue || 0 },
-        { name: 'rentForever', value: res.rentForeverValue || 0 }
-      ];
+    // REMOVED: Duplicate runTimingAnalysis function - using Calculator.runTimingAnalysis instead
+    // ===== APPLICATION STATE =====
+    const AppState = {
+      // Core parameters
+      btcPrice: 67000,
+      btcAmount: 1.5,
+      model: 'saylor',
+      years: 10,
+      purchaseTiming: 'now',
 
-      // Filter out invalid values
-      const validStrategies = strategies.filter(s => isFinite(s.value) && s.value > 0);
-      if (validStrategies.length === 0) return 'holdAll';
+      // User preferences
+      prefs: {
+        // Bitcoin Parameters
+        dcaAmount: 0,
+        dcaPeriod: 'monthly',
+        modelConfidence: 1.0,
+        taxRateBtc: 0.20,
 
-      validStrategies.sort((a, b) => a.value - b.value);
-      return validStrategies[0].name; // Return worst performing strategy
-    }
+        // Home Purchase Parameters
+        homePrice: 420000,
+        downPct: 0.20,
+        rate: 0.07,
+        term: 30,
+        taxRate: 0.012,
+        insurance: 1500,
+        hoa: 0,
+        appreciation: 0.03,
+        maintenance: 0.01,
+        closingCosts: 0.025,
 
-    function updateInsights(res) {
-      // Calculate key metrics
-      const values = [
-        { name: 'Hold All Bitcoin', value: res.holdAllValue, color: 'bitcoin' },
-        { name: 'Buy House', value: res.buyHouseValue, color: 'green' },
-        { name: 'Rent + Invest', value: res.rentInvestValue, color: 'blue' }
-      ];
-      values.sort((a, b) => b.value - a.value);
+        // Rent Alternative Parameters
+        rent: 2500,
+        rentGrowth: 0.03,
+        rentersInsurance: 200,
+        securityDeposit: 5000,
+        movingFrequency: 3,
+        movingCosts: 2000
+      },
 
-      const best = values[0];
-      const advantage = best.value - values[1].value;
+      // Chart state
+      chart: {
+        instance: null,
+        view: 'absolute', // 'absolute', 'relative', 'percentage'
+        visibleSeries: { hodl: true, buy: true, rent: true, opportunity: true }
+      }
+    };
 
-      // Update key metrics
-      document.getElementById('best-strategy').textContent = best.name;
-      document.getElementById('best-advantage').textContent = `+${formatCurrency(advantage)} advantage`;
-      document.getElementById('insight-model').textContent = model;
-      document.getElementById('insight-years').textContent = years;
+    // ===== UTILITY FUNCTIONS =====
+    const Utils = {
+      formatCurrency: (amount) => {
+        const abs = Math.abs(amount);
+        const sign = amount < 0 ? '-' : '';
+        if (abs >= 1e9) return sign + '$' + (abs/1e9).toFixed(1) + 'B';
+        if (abs >= 1e6) return sign + '$' + (abs/1e6).toFixed(1) + 'M';
+        if (abs >= 1e3) return sign + '$' + (abs/1e3).toFixed(0) + 'K';
+        return sign + '$' + abs.toLocaleString();
+      },
 
-      // Generate detailed insights
-      const insights = generateInsights(res);
-      document.getElementById('insights-list').innerHTML = insights.map(i =>
-        `<li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-bitcoin-500 rounded-full mt-2 flex-shrink-0"></div><span>${i}</span></li>`
-      ).join('');
+      buildCalculationInputs: (yearsOverride = AppState.years) => ({
+        // Core parameters
+        btcAmount: AppState.btcAmount || 0,
+        btcPrice: AppState.btcPrice || 0,
+        timeframeYears: yearsOverride || 0,
+        model: AppState.model || 'saylor',
+        purchaseTiming: AppState.purchaseTiming || 'now',
 
-      // Update comparison table
-      updateComparisonTable(res);
+        // Home purchase parameters
+        homePrice: AppState.prefs.homePrice || 0,
+        downPaymentPct: AppState.prefs.downPct || 0,
+        interestRate: AppState.prefs.rate || 0,
+        mortgageYears: AppState.prefs.term || 30,
+        propertyTaxRate: AppState.prefs.taxRate || 0,
+        insuranceAnnual: AppState.prefs.insurance || 0,
+        hoaAnnual: AppState.prefs.hoa || 0,
+        appreciationRate: AppState.prefs.appreciation || 0,
+        maintenanceRate: AppState.prefs.maintenance || 0,
 
-      // Update assumptions
-      document.getElementById('assumption-down').textContent = `${(prefs.downPct * 100).toFixed(0)}%`;
-      document.getElementById('assumption-rate').textContent = `${(prefs.rate * 100).toFixed(1)}%`;
-      document.getElementById('assumption-appreciation').textContent = `${(prefs.appreciation * 100).toFixed(1)}%`;
-      document.getElementById('assumption-rent').textContent = formatCurrency(prefs.rent);
-    }
+        // Rent parameters
+        rentAnnual: (AppState.prefs.rent || 0) * 12,
+        rentGrowthRate: AppState.prefs.rentGrowth || 0,
+        rentersInsurance: AppState.prefs.rentersInsurance || 0,
+        securityDeposit: AppState.prefs.securityDeposit || 0,
+        movingFrequency: AppState.prefs.movingFrequency || 3,
+        movingCosts: AppState.prefs.movingCosts || 0,
 
-    function generateInsights(res) {
-      const insights = [];
+        // Bitcoin parameters
+        dcaAmount: AppState.prefs.dcaAmount || 0,
+        modelConfidence: AppState.prefs.modelConfidence || 1.0,
+        taxRateBtc: AppState.prefs.taxRateBtc || 0
+      }),
+
+      getCurrentWorstStrategy: (result) => {
+        const strategies = [
+          { name: 'holdAll', value: result.holdAllValue || 0 },
+          { name: 'buyHouse', value: result.buyHouseValue || 0 },
+          { name: 'rentForever', value: result.rentForeverValue || 0 }
+        ];
+
+        const validStrategies = strategies.filter(s => isFinite(s.value) && s.value > 0);
+        if (validStrategies.length === 0) return 'holdAll';
+
+        validStrategies.sort((a, b) => a.value - b.value);
+        return validStrategies[0].name;
+      }
+    };
+
+    // ===== MAIN CALCULATION ENGINE =====
+    const Calculator = {
+      compute: (yearsOverride = AppState.years) => {
+        const inputs = Utils.buildCalculationInputs(yearsOverride);
+        return Calculator.runTimingAnalysis(inputs);
+      },
+
+      runTimingAnalysis: (inputs) => {
+        const {
+          btcAmount, btcPrice, timeframeYears, model, purchaseTiming,
+          downPaymentPct, interestRate, mortgageYears,
+          appreciationRate, homePrice, rentAnnual, dcaAmount
+        } = inputs;
+
+        // Validate inputs
+        if (!btcAmount || !btcPrice || !timeframeYears || btcAmount <= 0 || btcPrice <= 0 || timeframeYears <= 0) {
+          return { holdAllValue: 0, buyHouseValue: 0, rentForeverValue: 0, error: 'Invalid inputs' };
+        }
+
+        // Parse purchase timing
+        const timingMap = { 'now': 0, 'year-1': 1, 'year-2': 2, 'year-3': 3, 'year-5': 5 };
+        const purchaseYear = timingMap[purchaseTiming] || 0;
+
+        // Calculate DCA and final prices
+        const dcaBtcAccumulated = FinancialCalc.dcaAccumulation(inputs.dcaAmount, inputs.dcaPeriod, timeframeYears, model, btcPrice);
+        const finalBtcPrice = getBitcoinPrice(model, timeframeYears, btcPrice);
+
+        // Scenario 1: Hold all Bitcoin + DCA
+        const totalBtc = btcAmount + dcaBtcAccumulated;
+        const holdAllValue = totalBtc * finalBtcPrice;
+
+        // Scenario 2: Buy house at specific timing
+        const purchaseBtcPrice = getBitcoinPrice(model, purchaseYear, btcPrice);
+        const requiredDownPayment = homePrice * downPaymentPct;
+        const btcNeededForDown = requiredDownPayment / purchaseBtcPrice;
+
+        if (btcNeededForDown > btcAmount) {
+          return {
+            holdAllValue,
+            buyHouseValue: 0,
+            rentForeverValue: holdAllValue - FinancialCalc.rentCosts(inputs, timeframeYears),
+            opportunityCosts: { holdAll: 0, buyHouse: holdAllValue, rentForever: 0 },
+            error: 'Insufficient Bitcoin for down payment',
+            btcSpent: btcNeededForDown,
+            btcRemaining: 0
+          };
+        }
+
+        const btcRemaining = btcAmount - btcNeededForDown;
+        const yearsOfOwnership = Math.max(0, timeframeYears - purchaseYear);
+
+        // Calculate house equity
+        const futureHomeValue = homePrice * Math.pow(1 + appreciationRate, yearsOfOwnership);
+        const loanAmount = homePrice - requiredDownPayment;
+        const mortgage = FinancialCalc.mortgage(loanAmount, interestRate, mortgageYears);
+
+        // Calculate remaining mortgage balance
+        let remainingBalance = 0;
+        if (yearsOfOwnership > 0 && yearsOfOwnership < mortgageYears) {
+          const monthlyRate = interestRate / 12;
+          const paymentsMade = yearsOfOwnership * 12;
+          remainingBalance = loanAmount * Math.pow(1 + monthlyRate, paymentsMade) -
+            mortgage.monthlyPayment * ((Math.pow(1 + monthlyRate, paymentsMade) - 1) / monthlyRate);
+          remainingBalance = Math.max(0, remainingBalance);
+        }
+
+        const homeEquity = Math.max(0, futureHomeValue - remainingBalance);
+        const remainingBtcValue = (btcRemaining + dcaBtcAccumulated) * finalBtcPrice;
+        const buyHouseValue = homeEquity + remainingBtcValue;
+
+        // Scenario 3: Rent forever + keep all Bitcoin with DCA
+        const totalRentCosts = FinancialCalc.rentCosts(inputs, timeframeYears);
+        const rentForeverValue = holdAllValue - totalRentCosts;
+
+        // Calculate opportunity costs
+        const allValues = [holdAllValue, buyHouseValue, rentForeverValue].filter(v => isFinite(v) && v > 0);
+        const maxValue = Math.max(...allValues);
+
+        const opportunityCosts = {
+          holdAll: maxValue - holdAllValue,
+          buyHouse: maxValue - buyHouseValue,
+          rentForever: maxValue - rentForeverValue
+        };
+
+        return {
+          holdAllValue: holdAllValue || 0,
+          buyHouseValue: buyHouseValue || 0,
+          rentForeverValue: rentForeverValue || 0,
+          opportunityCosts,
+          maxValue,
+          btcSpent: btcNeededForDown || 0,
+          btcRemaining: btcRemaining || 0,
+          purchaseBtcPrice: purchaseBtcPrice || btcPrice,
+          homeEquity: homeEquity || 0,
+          remainingBtcValue: remainingBtcValue || 0,
+          monthlyPayment: mortgage.monthlyPayment || 0,
+          monthlyRent: (rentAnnual || 0) / 12,
+          yearsOfOwnership: yearsOfOwnership || 0
+        };
+      }
+    };
+
+    // REMOVED: Duplicate chart state - using AppState.chart instead
+
+    // ===== UI UPDATE FUNCTIONS =====
+    const UIManager = {
+      updateAll: () => {
+        const res = Calculator.compute();
+
+        // Validate results
+        if (!res || res.error) {
+          console.error('Computation error:', res?.error);
+          return;
+        }
+
+        // Update KPIs with validation
+        const hodlEl = document.getElementById('kpi-hodl');
+        const buyEl = document.getElementById('kpi-buy');
+        const rentEl = document.getElementById('kpi-rent');
+        const oppEl = document.getElementById('kpi-opportunity');
+
+        if (hodlEl) hodlEl.textContent = Utils.formatCurrency(res.holdAllValue || 0);
+        if (buyEl) buyEl.textContent = Utils.formatCurrency(res.buyHouseValue || 0);
+        if (rentEl) rentEl.textContent = Utils.formatCurrency(res.rentForeverValue || 0);
+
+        // Calculate and display worst strategy's opportunity cost
+        const worstStrategy = Utils.getCurrentWorstStrategy(res);
+        const worstOpportunityCost = res.opportunityCosts[worstStrategy] || 0;
+        if (oppEl) oppEl.textContent = Utils.formatCurrency(-worstOpportunityCost);
+
+        // Update timing label
+        const timingLabels = {
+          'now': 'Now', 'year-1': 'Year 1', 'year-2': 'Year 2',
+          'year-3': 'Year 3', 'year-5': 'Year 5'
+        };
+        const timingEl = document.getElementById('timing-label');
+        if (timingEl) timingEl.textContent = timingLabels[AppState.purchaseTiming] || 'Now';
+
+        ChartManager.updateChart();
+        UIManager.updateInsights(res);
+      },
+
+
+
+      updateInsights: (res) => {
+        // Calculate key metrics
+        const values = [
+          { name: 'Hold All Bitcoin', value: res.holdAllValue, color: 'bitcoin' },
+          { name: 'Buy House', value: res.buyHouseValue, color: 'green' },
+          { name: 'Rent Forever', value: res.rentForeverValue, color: 'blue' }
+        ];
+        values.sort((a, b) => b.value - a.value);
+
+        const best = values[0];
+        const advantage = best.value - values[1].value;
+
+        // Update key metrics
+        const bestStrategyEl = document.getElementById('best-strategy');
+        const bestAdvantageEl = document.getElementById('best-advantage');
+        const insightModelEl = document.getElementById('insight-model');
+        const insightYearsEl = document.getElementById('insight-years');
+
+        if (bestStrategyEl) bestStrategyEl.textContent = best.name;
+        if (bestAdvantageEl) bestAdvantageEl.textContent = `+${Utils.formatCurrency(advantage)} advantage`;
+        if (insightModelEl) insightModelEl.textContent = AppState.model;
+        if (insightYearsEl) insightYearsEl.textContent = AppState.years;
+
+        // Generate detailed insights
+        const insights = UIManager.generateInsights(res);
+        const insightsListEl = document.getElementById('insights-list');
+        if (insightsListEl) {
+          insightsListEl.innerHTML = insights.map(i =>
+            `<li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-bitcoin-500 rounded-full mt-2 flex-shrink-0"></div><span>${i}</span></li>`
+          ).join('');
+        }
+
+        // Update assumptions
+        const assumptionDownEl = document.getElementById('assumption-down');
+        const assumptionRateEl = document.getElementById('assumption-rate');
+        const assumptionAppreciationEl = document.getElementById('assumption-appreciation');
+        const assumptionRentEl = document.getElementById('assumption-rent');
+
+        if (assumptionDownEl) assumptionDownEl.textContent = `${(AppState.prefs.downPct * 100).toFixed(0)}%`;
+        if (assumptionRateEl) assumptionRateEl.textContent = `${(AppState.prefs.rate * 100).toFixed(1)}%`;
+        if (assumptionAppreciationEl) assumptionAppreciationEl.textContent = `${(AppState.prefs.appreciation * 100).toFixed(1)}%`;
+        if (assumptionRentEl) assumptionRentEl.textContent = Utils.formatCurrency(AppState.prefs.rent);
+      },
+
+      generateInsights: (res) => {
+        const insights = [];
       const timingLabels = {
         'now': 'immediately', 'year-1': 'in year 1', 'year-2': 'in year 2',
         'year-3': 'in year 3', 'year-5': 'in year 5'
       };
-      const timing = timingLabels[purchaseTiming] || 'now';
+      const timing = timingLabels[AppState.purchaseTiming] || 'now';
 
       // Strategy comparison
       const strategies = [
         { name: 'Hold All Bitcoin', value: res.holdAllValue },
         { name: 'Buy House', value: res.buyHouseValue },
-        { name: 'Rent + Invest', value: res.rentInvestValue }
+        { name: 'Rent Forever', value: res.rentForeverValue }
       ].sort((a, b) => b.value - a.value);
 
       const best = strategies[0];
       const worst = strategies[2];
       const advantage = best.value - worst.value;
 
-      insights.push(`${best.name} is the optimal strategy, outperforming ${worst.name} by ${formatCurrency(advantage)} over ${years} years.`);
+      insights.push(`${best.name} is the optimal strategy, outperforming ${worst.name} by ${Utils.formatCurrency(advantage)} over ${AppState.years} years.`);
 
       // Bitcoin efficiency for house purchase
       if (res.btcSpent) {
         insights.push(`Buying ${timing} requires ${res.btcSpent.toFixed(3)} BTC for down payment, leaving ${res.btcRemaining.toFixed(3)} BTC to appreciate.`);
       }
 
-      // Rent + invest analysis
-      if (res.mortgagePaymentDifference > 0) {
-        insights.push(`Renting saves ${formatCurrency(res.mortgagePaymentDifference)}/month vs mortgage payment, which can be invested in Bitcoin.`);
-      } else if (res.monthlyRent > res.monthlyPayment) {
-        insights.push(`Mortgage payment (${formatCurrency(res.monthlyPayment)}) is lower than rent (${formatCurrency(res.monthlyRent)}), favoring ownership.`);
+      // Rent analysis
+      if (res.monthlyRent && res.monthlyPayment) {
+        if (res.monthlyRent < res.monthlyPayment) {
+          const savings = res.monthlyPayment - res.monthlyRent;
+          insights.push(`Renting saves ${Utils.formatCurrency(savings)}/month vs mortgage payment, enabling more Bitcoin investment.`);
+        } else {
+          insights.push(`Mortgage payment (${Utils.formatCurrency(res.monthlyPayment)}) is lower than rent (${Utils.formatCurrency(res.monthlyRent)}), favoring ownership.`);
+        }
       }
 
       // Model context
-      insights.push(`Under ${model} model, Bitcoin could reach ${formatCurrency(res.purchaseBtcPrice || getBtcPrice(years))} per coin ${timing}.`);
+      const projectedPrice = res.purchaseBtcPrice || getBitcoinPrice(AppState.model, AppState.years, AppState.btcPrice);
+      insights.push(`Under ${AppState.model} model, Bitcoin could reach ${Utils.formatCurrency(projectedPrice)} per coin ${timing}.`);
 
       // Risk consideration
       if (res.holdAllValue > res.buyHouseValue * 1.5) {
@@ -925,7 +1099,8 @@ import { runScenarios } from '@/services/scenarios';
       }
 
       return insights;
-    }
+      }
+    };
 
     function updateComparisonTable(res) {
       const initialBtcValue = btcAmount * btcPrice;
@@ -966,239 +1141,241 @@ import { runScenarios } from '@/services/scenarios';
       `).join('');
     }
 
-    let chart;
-    function updateChart() {
-      const currentYear = new Date().getFullYear();
-      const labels = Array.from({length: years + 1}, (_, i) => currentYear + i);
-      const yearIndices = Array.from({length: years + 1}, (_, i) => i);
+    // ===== CHART MANAGEMENT =====
+    const ChartManager = {
+      updateChart: () => {
+        const currentYear = new Date().getFullYear();
+        const labels = Array.from({length: AppState.years + 1}, (_, i) => currentYear + i);
+        const yearIndices = Array.from({length: AppState.years + 1}, (_, i) => i);
 
-      // Get data for each year with validation
-      const hodlData = yearIndices.map(y => {
-        const res = compute(y);
-        return res && isFinite(res.holdAllValue) ? res.holdAllValue : 0;
-      });
+        // Get data for each year with validation
+        const hodlData = yearIndices.map(y => {
+          const res = Calculator.compute(y);
+          return res && isFinite(res.holdAllValue) ? res.holdAllValue : 0;
+        });
 
-      const buyData = yearIndices.map(y => {
-        const res = compute(y);
-        return res && isFinite(res.buyHouseValue) ? res.buyHouseValue : 0;
-      });
+        const buyData = yearIndices.map(y => {
+          const res = Calculator.compute(y);
+          return res && isFinite(res.buyHouseValue) ? res.buyHouseValue : 0;
+        });
 
-      const rentData = yearIndices.map(y => {
-        const res = compute(y);
-        return res && isFinite(res.rentForeverValue) ? res.rentForeverValue : 0;
-      });
+        const rentData = yearIndices.map(y => {
+          const res = Calculator.compute(y);
+          return res && isFinite(res.rentForeverValue) ? res.rentForeverValue : 0;
+        });
 
-      // Calculate opportunity cost data (lost gains from not choosing optimal)
-      const opportunityData = yearIndices.map(y => {
-        const res = compute(y);
-        if (!res || res.error) return 0;
+        // Calculate opportunity cost data (lost gains from not choosing optimal)
+        const opportunityData = yearIndices.map(y => {
+          const res = Calculator.compute(y);
+          if (!res || res.error) return 0;
 
-        const values = [res.holdAllValue, res.buyHouseValue, res.rentForeverValue].filter(v => isFinite(v));
-        if (values.length === 0) return 0;
+          const values = [res.holdAllValue, res.buyHouseValue, res.rentForeverValue].filter(v => isFinite(v));
+          if (values.length === 0) return 0;
 
-        const maxValue = Math.max(...values);
-        const minValue = Math.min(...values);
-        return -(maxValue - minValue); // Negative to show as loss
-      });
+          const maxValue = Math.max(...values);
+          const minValue = Math.min(...values);
+          return -(maxValue - minValue); // Negative to show as loss
+        });
 
-      // Transform data based on view mode
-      let transformedData = { hodl: hodlData, buy: buyData, rent: rentData, opportunity: opportunityData };
-      if (chartView === 'relative') {
-        transformedData.buy = buyData.map((v, i) => v - hodlData[i]);
-        transformedData.rent = rentData.map((v, i) => v - hodlData[i]);
-        transformedData.hodl = hodlData.map(() => 0); // Baseline
-        transformedData.opportunity = opportunityData; // Keep as absolute loss
-      } else if (chartView === 'percentage') {
-        const initial = {
-          hodl: hodlData[0] || 1,
-          buy: buyData[0] || 1,
-          rent: rentData[0] || 1
-        };
-        transformedData.hodl = hodlData.map(v => ((v / initial.hodl) - 1) * 100);
-        transformedData.buy = buyData.map(v => ((v / initial.buy) - 1) * 100);
-        transformedData.rent = rentData.map(v => ((v / initial.rent) - 1) * 100);
-        transformedData.opportunity = opportunityData.map(v => (v / initial.hodl) * 100);
-      }
-
-      const datasets = [
-        {
-          label: 'Hold All Bitcoin',
-          data: transformedData.hodl,
-          borderColor: '#ed7611',
-          backgroundColor: 'rgba(237, 118, 17, 0.1)',
-          hidden: !visibleSeries.hodl,
-          tension: 0.1,
-          pointRadius: 0,
-          pointHoverRadius: 6,
-          fill: false
-        },
-        {
-          label: 'Buy House + Remaining BTC',
-          data: transformedData.buy,
-          borderColor: '#10b981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          hidden: !visibleSeries.buy,
-          tension: 0.1,
-          pointRadius: 0,
-          pointHoverRadius: 6,
-          fill: false
-        },
-        {
-          label: 'Rent Forever + Keep All BTC',
-          data: transformedData.rent,
-          borderColor: '#3b82f6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          hidden: !visibleSeries.rent,
-          tension: 0.1,
-          pointRadius: 0,
-          pointHoverRadius: 6,
-          fill: false
-        },
-        {
-          label: 'Lost Opportunity (Worst Strategy)',
-          data: transformedData.opportunity,
-          borderColor: '#ef4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          hidden: !visibleSeries.opportunity,
-          tension: 0.1,
-          pointRadius: 0,
-          pointHoverRadius: 6,
-          fill: true,
-          borderDash: [5, 5]
+        // Transform data based on view mode
+        let transformedData = { hodl: hodlData, buy: buyData, rent: rentData, opportunity: opportunityData };
+        if (AppState.chart.view === 'relative') {
+          transformedData.buy = buyData.map((v, i) => v - hodlData[i]);
+          transformedData.rent = rentData.map((v, i) => v - hodlData[i]);
+          transformedData.hodl = hodlData.map(() => 0); // Baseline
+          transformedData.opportunity = opportunityData; // Keep as absolute loss
+        } else if (AppState.chart.view === 'percentage') {
+          const initial = {
+            hodl: hodlData[0] || 1,
+            buy: buyData[0] || 1,
+            rent: rentData[0] || 1
+          };
+          transformedData.hodl = hodlData.map(v => ((v / initial.hodl) - 1) * 100);
+          transformedData.buy = buyData.map(v => ((v / initial.buy) - 1) * 100);
+          transformedData.rent = rentData.map(v => ((v / initial.rent) - 1) * 100);
+          transformedData.opportunity = opportunityData.map(v => (v / initial.hodl) * 100);
         }
-      ];
 
-      const ctx = document.getElementById('projection-chart');
-      if (!ctx) {
-        console.error('Chart canvas not found');
-        return;
-      }
+        const datasets = [
+          {
+            label: 'Hold All Bitcoin',
+            data: transformedData.hodl,
+            borderColor: '#ed7611',
+            backgroundColor: 'rgba(237, 118, 17, 0.1)',
+            hidden: !AppState.chart.visibleSeries.hodl,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            fill: false
+          },
+          {
+            label: 'Buy House + Remaining BTC',
+            data: transformedData.buy,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            hidden: !AppState.chart.visibleSeries.buy,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            fill: false
+          },
+          {
+            label: 'Rent Forever + Keep All BTC',
+            data: transformedData.rent,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            hidden: !AppState.chart.visibleSeries.rent,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            fill: false
+          },
+          {
+            label: 'Lost Opportunity (Worst Strategy)',
+            data: transformedData.opportunity,
+            borderColor: '#ef4444',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            hidden: !AppState.chart.visibleSeries.opportunity,
+            tension: 0.1,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            fill: true,
+            borderDash: [5, 5]
+          }
+        ];
 
-      if (!chart) {
-        chart = new Chart(ctx, {
-          type: 'line',
-          data: { labels, datasets },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: { mode: 'index', intersect: false },
-            scales: {
-              y: {
-                ticks: {
-                  callback: v => chartView === 'percentage' ? `${v.toFixed(0)}%` : formatCurrency(v)
+        const ctx = document.getElementById('projection-chart');
+        if (!ctx) {
+          console.error('Chart canvas not found');
+          return;
+        }
+
+        if (!AppState.chart.instance) {
+          AppState.chart.instance = new Chart(ctx, {
+            type: 'line',
+            data: { labels, datasets },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              interaction: { mode: 'index', intersect: false },
+              scales: {
+                y: {
+                  ticks: {
+                    callback: v => AppState.chart.view === 'percentage' ? `${v.toFixed(0)}%` : Utils.formatCurrency(v)
+                  },
+                  grid: { color: 'rgba(0,0,0,0.1)' }
                 },
-                grid: { color: 'rgba(0,0,0,0.1)' }
-              },
-              x: {
-                title: { display: true, text: 'Year' },
-                grid: { color: 'rgba(0,0,0,0.1)' },
-                ticks: {
-                  callback: function(value, index) {
-                    return this.getLabelForValue(value);
+                x: {
+                  title: { display: true, text: 'Year' },
+                  grid: { color: 'rgba(0,0,0,0.1)' },
+                  ticks: {
+                    callback: function(value, index) {
+                      return this.getLabelForValue(value);
+                    }
                   }
                 }
-              }
-            },
-            plugins: {
-              legend: { display: false }, // Custom legend
-              tooltip: {
-                backgroundColor: 'rgba(255,255,255,0.95)',
-                titleColor: '#000',
-                bodyColor: '#000',
-                borderColor: '#e5e7eb',
-                borderWidth: 1,
-                callbacks: {
-                  title: (items) => `${items[0].label}`,
-                  label: (ctx) => {
-                    const value = ctx.parsed.y;
-                    const suffix = chartView === 'percentage' ? '%' : '';
-                    const prefix = chartView === 'relative' && value >= 0 ? '+' : '';
-                    return `${ctx.dataset.label}: ${prefix}${chartView === 'percentage' ? value.toFixed(1) : formatCurrency(value)}${suffix}`;
+              },
+              plugins: {
+                legend: { display: false }, // Custom legend
+                tooltip: {
+                  backgroundColor: 'rgba(255,255,255,0.95)',
+                  titleColor: '#000',
+                  bodyColor: '#000',
+                  borderColor: '#e5e7eb',
+                  borderWidth: 1,
+                  callbacks: {
+                    title: (items) => `${items[0].label}`,
+                    label: (ctx) => {
+                      const value = ctx.parsed.y;
+                      const suffix = AppState.chart.view === 'percentage' ? '%' : '';
+                      const prefix = AppState.chart.view === 'relative' && value >= 0 ? '+' : '';
+                      return `${ctx.dataset.label}: ${prefix}${AppState.chart.view === 'percentage' ? value.toFixed(1) : Utils.formatCurrency(value)}${suffix}`;
+                    }
                   }
                 }
               }
             }
-          }
-        });
-      } else {
-        chart.data.labels = labels;
-        chart.data.datasets = datasets;
-        chart.options.scales.y.ticks.callback = v => chartView === 'percentage' ? `${v.toFixed(0)}%` : formatCurrency(v);
-        chart.update('none');
+          });
+        } else {
+          AppState.chart.instance.data.labels = labels;
+          AppState.chart.instance.data.datasets = datasets;
+          AppState.chart.instance.options.scales.y.ticks.callback = v => AppState.chart.view === 'percentage' ? `${v.toFixed(0)}%` : Utils.formatCurrency(v);
+          AppState.chart.instance.update('none');
+        }
       }
-    }
+    };
     // Chart view controls
     document.getElementById('view-absolute')?.addEventListener('click', () => {
-      chartView = 'absolute';
+      AppState.chart.view = 'absolute';
       document.querySelectorAll('[id^="view-"]').forEach(btn => btn.classList.remove('bg-bitcoin-500', 'text-white'));
       document.getElementById('view-absolute').classList.add('bg-bitcoin-500', 'text-white');
-      updateChart();
+      ChartManager.updateChart();
     });
 
     document.getElementById('view-relative')?.addEventListener('click', () => {
-      chartView = 'relative';
+      AppState.chart.view = 'relative';
       document.querySelectorAll('[id^="view-"]').forEach(btn => btn.classList.remove('bg-bitcoin-500', 'text-white'));
       document.getElementById('view-relative').classList.add('bg-bitcoin-500', 'text-white');
-      updateChart();
+      ChartManager.updateChart();
     });
 
     document.getElementById('view-percentage')?.addEventListener('click', () => {
-      chartView = 'percentage';
+      AppState.chart.view = 'percentage';
       document.querySelectorAll('[id^="view-"]').forEach(btn => btn.classList.remove('bg-bitcoin-500', 'text-white'));
       document.getElementById('view-percentage').classList.add('bg-bitcoin-500', 'text-white');
-      updateChart();
+      ChartManager.updateChart();
     });
 
     // Series toggle controls
     document.getElementById('toggle-hodl')?.addEventListener('click', () => {
-      visibleSeries.hodl = !visibleSeries.hodl;
-      document.getElementById('toggle-hodl').style.opacity = visibleSeries.hodl ? '1' : '0.5';
-      updateChart();
+      AppState.chart.visibleSeries.hodl = !AppState.chart.visibleSeries.hodl;
+      document.getElementById('toggle-hodl').style.opacity = AppState.chart.visibleSeries.hodl ? '1' : '0.5';
+      ChartManager.updateChart();
     });
 
     document.getElementById('toggle-buy')?.addEventListener('click', () => {
-      visibleSeries.buy = !visibleSeries.buy;
-      document.getElementById('toggle-buy').style.opacity = visibleSeries.buy ? '1' : '0.5';
-      updateChart();
+      AppState.chart.visibleSeries.buy = !AppState.chart.visibleSeries.buy;
+      document.getElementById('toggle-buy').style.opacity = AppState.chart.visibleSeries.buy ? '1' : '0.5';
+      ChartManager.updateChart();
     });
 
     document.getElementById('toggle-rent')?.addEventListener('click', () => {
-      visibleSeries.rent = !visibleSeries.rent;
-      document.getElementById('toggle-rent').style.opacity = visibleSeries.rent ? '1' : '0.5';
-      updateChart();
+      AppState.chart.visibleSeries.rent = !AppState.chart.visibleSeries.rent;
+      document.getElementById('toggle-rent').style.opacity = AppState.chart.visibleSeries.rent ? '1' : '0.5';
+      ChartManager.updateChart();
     });
 
     document.getElementById('toggle-opportunity')?.addEventListener('click', () => {
-      visibleSeries.opportunity = !visibleSeries.opportunity;
-      document.getElementById('toggle-opportunity').style.opacity = visibleSeries.opportunity ? '1' : '0.5';
-      updateChart();
+      AppState.chart.visibleSeries.opportunity = !AppState.chart.visibleSeries.opportunity;
+      document.getElementById('toggle-opportunity').style.opacity = AppState.chart.visibleSeries.opportunity ? '1' : '0.5';
+      ChartManager.updateChart();
     });
 
     // Wire controls
     document.getElementById('btc-amount').addEventListener('input', e => {
-      btcAmount = parseFloat(e.target.value) || 0;
-      document.getElementById('btc-value').textContent = formatCurrency(btcAmount * btcPrice);
-      updateAll();
+      AppState.btcAmount = parseFloat(e.target.value) || 0;
+      document.getElementById('btc-value').textContent = Utils.formatCurrency(AppState.btcAmount * AppState.btcPrice);
+      UIManager.updateAll();
     });
 
 
 
     document.getElementById('purchase-timing').addEventListener('change', e => {
-      purchaseTiming = e.target.value;
-      updateAll();
+      AppState.purchaseTiming = e.target.value;
+      UIManager.updateAll();
     });
 
     document.getElementById('model').addEventListener('change', e => {
-      model = e.target.value;
-      updateAll();
+      AppState.model = e.target.value;
+      UIManager.updateAll();
     });
 
     document.querySelectorAll('[data-years]').forEach(btn => {
       btn.addEventListener('click', e => {
         document.querySelectorAll('[data-years]').forEach(b => b.classList.remove('bg-bitcoin-500', 'text-white'));
         e.target.classList.add('bg-bitcoin-500', 'text-white');
-        years = parseInt(e.target.dataset.years);
-        updateAll();
+        AppState.years = parseInt(e.target.dataset.years);
+        UIManager.updateAll();
       });
     });
 
@@ -1259,59 +1436,378 @@ import { runScenarios } from '@/services/scenarios';
       });
     });
 
-    // All advanced inputs with instant updates
-    const inputMappings = {
-      'home-price': (val) => prefs.homePrice = val,
-      'down-pct': (val) => prefs.downPct = val / 100,
-      'rate': (val) => prefs.rate = val / 100,
-      'term': (val) => prefs.term = val,
-      'tax-rate': (val) => prefs.taxRate = val / 100,
-      'insurance': (val) => prefs.insurance = val,
-      'hoa': (val) => prefs.hoa = val,
-      'appreciation': (val) => prefs.appreciation = val / 100,
-      'maintenance': (val) => prefs.maintenance = val / 100,
-      'rent': (val) => prefs.rent = val,
-      'rent-growth': (val) => prefs.rentGrowth = val / 100,
-      'security-deposit': (val) => prefs.securityDeposit = val,
-      'moving-costs': (val) => prefs.movingCosts = val,
-      'cost-basis': (val) => prefs.costBasis = val,
-      'dca-amount': (val) => prefs.dcaAmount = val,
-      'tax-rate-btc': (val) => prefs.taxRateBtc = val / 100,
-      'inflation': (val) => prefs.inflation = val / 100,
-      'stock-return': (val) => prefs.stockReturn = val / 100
+    // ===== INPUT MANAGEMENT =====
+    const InputManager = {
+      mappings: {
+        // Bitcoin Parameters
+        'btc-price-override': (val) => { AppState.btcPrice = val; },
+        'dca-amount': (val) => AppState.prefs.dcaAmount = val,
+        'dca-period': (val) => AppState.prefs.dcaPeriod = val,
+        'tax-rate-btc': (val) => AppState.prefs.taxRateBtc = val / 100,
+        'model-confidence': (val) => AppState.prefs.modelConfidence = val / 100,
+
+        // Home Purchase Parameters
+        'home-price': (val) => AppState.prefs.homePrice = val,
+        'down-pct': (val) => AppState.prefs.downPct = val / 100,
+        'rate': (val) => AppState.prefs.rate = val / 100,
+        'term': (val) => AppState.prefs.term = parseInt(val),
+        'tax-rate': (val) => AppState.prefs.taxRate = val / 100,
+        'insurance': (val) => AppState.prefs.insurance = val,
+        'hoa': (val) => AppState.prefs.hoa = val,
+        'appreciation': (val) => AppState.prefs.appreciation = val / 100,
+        'maintenance': (val) => AppState.prefs.maintenance = val / 100,
+        'closing-costs': (val) => AppState.prefs.closingCosts = val / 100,
+
+        // Rent Alternative Parameters
+        'rent': (val) => AppState.prefs.rent = val,
+        'rent-growth': (val) => AppState.prefs.rentGrowth = val / 100,
+        'renters-insurance': (val) => AppState.prefs.rentersInsurance = val,
+        'security-deposit': (val) => AppState.prefs.securityDeposit = val,
+        'moving-frequency': (val) => AppState.prefs.movingFrequency = val,
+        'moving-costs': (val) => AppState.prefs.movingCosts = val
+      },
+
+      initRealTimeInputs: () => {
+        Object.keys(InputManager.mappings).forEach(id => {
+          const element = document.getElementById(id);
+          if (element) {
+            // Add both input and change events for immediate updates
+            ['input', 'change'].forEach(eventType => {
+              element.addEventListener(eventType, e => {
+                const val = parseFloat(e.target.value) || 0;
+                InputManager.mappings[id](val);
+
+                // Update BTC value display if BTC amount or price changes
+                if (id === 'btc-price-override') {
+                  const btcValueEl = document.getElementById('btc-value');
+                  if (btcValueEl) {
+                    btcValueEl.textContent = Utils.formatCurrency(AppState.btcAmount * AppState.btcPrice);
+                  }
+                  const btcPriceEl = document.getElementById('btc-price');
+                  if (btcPriceEl) {
+                    btcPriceEl.textContent = '$' + AppState.btcPrice.toLocaleString();
+                  }
+                }
+
+                // Instant update of all calculations and chart
+                UIManager.updateAll();
+              });
+            });
+          } else {
+            console.warn(`Input element not found: ${id}`);
+          }
+        });
+      }
     };
 
-    Object.keys(inputMappings).forEach(id => {
-      document.getElementById(id)?.addEventListener('input', e => {
-        const val = parseFloat(e.target.value) || 0;
-        inputMappings[id](val);
-        updateAll();
+    // Modal content system - separated concerns
+    const modalContent = {
+      'hold-bitcoin-info': {
+        title: 'Hold All Bitcoin Strategy',
+        content: `
+          <div class="space-y-4">
+            <div class="bg-bitcoin-50 dark:bg-bitcoin-900/20 p-4 rounded-lg border border-bitcoin-200 dark:border-bitcoin-800">
+              <h4 class="font-semibold text-bitcoin-800 dark:text-bitcoin-200 mb-2">Strategy Overview</h4>
+              <p>Keep your entire Bitcoin stack and never purchase real estate. This represents pure Bitcoin exposure with maximum upside potential.</p>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">How It Works</h4>
+              <ul class="list-disc list-inside space-y-1 text-sm">
+                <li>Maintain 100% Bitcoin allocation</li>
+                <li>Pay rent from other income sources</li>
+                <li>No real estate equity building</li>
+                <li>Full exposure to Bitcoin price appreciation</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Pros & Cons</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded">
+                  <h5 class="font-medium text-green-800 dark:text-green-200 mb-1">Advantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Maximum Bitcoin upside</li>
+                    <li>High liquidity</li>
+                    <li>No maintenance costs</li>
+                    <li>Geographic flexibility</li>
+                  </ul>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/20 p-3 rounded">
+                  <h5 class="font-medium text-red-800 dark:text-red-200 mb-1">Disadvantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>High volatility risk</li>
+                    <li>No equity building</li>
+                    <li>Rent payments forever</li>
+                    <li>No housing stability</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <h4 class="font-semibold mb-2">Best For</h4>
+              <p class="text-sm">Investors with strong Bitcoin conviction, stable income for rent, and high risk tolerance. Ideal for those prioritizing maximum Bitcoin exposure over housing stability.</p>
+            </div>
+          </div>
+        `
+      },
+
+      'buy-house-info': {
+        title: 'Buy House Strategy',
+        content: `
+          <div class="space-y-4">
+            <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg border border-green-200 dark:border-green-800">
+              <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Strategy Overview</h4>
+              <p>Use Bitcoin for a house down payment at your selected timing, then build equity while keeping remaining Bitcoin.</p>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">How It Works</h4>
+              <ul class="list-disc list-inside space-y-1 text-sm">
+                <li>Sell Bitcoin for down payment at chosen timing</li>
+                <li>Take mortgage for remaining home cost</li>
+                <li>Build equity through payments and appreciation</li>
+                <li>Keep remaining Bitcoin for continued growth</li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Timing Impact</h4>
+              <p class="text-sm mb-2">Purchase timing significantly affects outcomes:</p>
+              <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded text-sm">
+                <ul class="list-disc list-inside space-y-1">
+                  <li><strong>Buy Now:</strong> Use current Bitcoin price, maximum ownership time</li>
+                  <li><strong>Buy Later:</strong> Potentially higher Bitcoin price = less BTC needed</li>
+                  <li><strong>Trade-off:</strong> Less ownership time vs. Bitcoin efficiency</li>
+                </ul>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Pros & Cons</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded">
+                  <h5 class="font-medium text-green-800 dark:text-green-200 mb-1">Advantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Build real estate equity</li>
+                    <li>Housing stability</li>
+                    <li>Leverage real estate gains</li>
+                    <li>Keep some Bitcoin exposure</li>
+                  </ul>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/20 p-3 rounded">
+                  <h5 class="font-medium text-red-800 dark:text-red-200 mb-1">Disadvantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Reduced Bitcoin exposure</li>
+                    <li>Opportunity cost of spent BTC</li>
+                    <li>Maintenance and taxes</li>
+                    <li>Lower liquidity</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      'rent-forever-info': {
+        title: 'Rent Forever Strategy',
+        content: `
+          <div class="space-y-4">
+            <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+              <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Strategy Overview</h4>
+              <p>Keep all Bitcoin while renting permanently. Accept no equity building in exchange for maximum Bitcoin exposure.</p>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Key Difference from "Hold All Bitcoin"</h4>
+              <div class="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded text-sm">
+                <p>This strategy accounts for the cumulative cost of rent payments over time, showing your net wealth after paying for housing through renting rather than ownership.</p>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Calculation Method</h4>
+              <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm font-mono">
+                <p>Final Wealth = (Bitcoin Value at End) - (Total Rent Paid)</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Accounts for rent inflation over time</p>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Pros & Cons</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div class="bg-green-50 dark:bg-green-900/20 p-3 rounded">
+                  <h5 class="font-medium text-green-800 dark:text-green-200 mb-1">Advantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>100% Bitcoin exposure</li>
+                    <li>Maximum flexibility</li>
+                    <li>No maintenance costs</li>
+                    <li>No property taxes</li>
+                  </ul>
+                </div>
+                <div class="bg-red-50 dark:bg-red-900/20 p-3 rounded">
+                  <h5 class="font-medium text-red-800 dark:text-red-200 mb-1">Disadvantages</h5>
+                  <ul class="list-disc list-inside space-y-1">
+                    <li>Rent payments forever</li>
+                    <li>No equity building</li>
+                    <li>Rent inflation risk</li>
+                    <li>No housing control</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      'opportunity-cost-info': {
+        title: 'Lost Opportunity Explained',
+        content: `
+          <div class="space-y-4">
+            <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+              <h4 class="font-semibold text-red-800 dark:text-red-200 mb-2">What Is Opportunity Cost?</h4>
+              <p>The value you give up by choosing one strategy over the best alternative. This shows what you "lose" by not picking the optimal strategy.</p>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">How We Calculate It</h4>
+              <div class="bg-gray-50 dark:bg-gray-800 p-3 rounded text-sm">
+                <ol class="list-decimal list-inside space-y-1">
+                  <li>Calculate final wealth for all three strategies</li>
+                  <li>Identify the highest-performing strategy</li>
+                  <li>Show the difference between best and worst strategies</li>
+                  <li>Display as negative number (what you lose)</li>
+                </ol>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Example Scenario</h4>
+              <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded text-sm">
+                <div class="space-y-1">
+                  <p><strong>Hold All Bitcoin:</strong> $1.2M</p>
+                  <p><strong>Buy House:</strong> $800K</p>
+                  <p><strong>Rent Forever:</strong> $1.1M</p>
+                  <p class="text-red-600 dark:text-red-400 font-semibold">Lost Opportunity: -$400K</p>
+                  <p class="text-xs">Buying house costs you $400K vs. holding Bitcoin</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="font-semibold mb-2">Why This Matters</h4>
+              <ul class="list-disc list-inside space-y-1 text-sm">
+                <li><strong>Decision Making:</strong> Quantifies the cost of each choice</li>
+                <li><strong>Risk Assessment:</strong> Shows potential regret from suboptimal decisions</li>
+                <li><strong>Timing Impact:</strong> Reveals how purchase timing affects outcomes</li>
+                <li><strong>Strategy Comparison:</strong> Makes trade-offs concrete and measurable</li>
+              </ul>
+            </div>
+
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-lg">
+              <h4 class="font-semibold mb-2">Important Note</h4>
+              <p class="text-sm">Opportunity cost is based on projections, not guarantees. Bitcoin's volatility means actual results may vary significantly from any model predictions.</p>
+            </div>
+          </div>
+        `
+      }
+    };
+
+    // Modal system
+    function initModals() {
+      const overlay = document.getElementById('modal-overlay');
+      const modalTitle = document.getElementById('modal-title');
+      const modalContentEl = document.getElementById('modal-content');
+      const closeBtn = document.getElementById('modal-close');
+
+      if (!overlay || !modalTitle || !modalContentEl || !closeBtn) {
+        console.error('Modal elements not found');
+        return;
+      }
+
+      // Open modal
+      document.querySelectorAll('[data-modal]').forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          const modalId = trigger.dataset.modal;
+          const content = modalContent[modalId];
+
+          console.log('Opening modal:', modalId, content);
+
+          if (content) {
+            modalTitle.textContent = content.title;
+            modalContentEl.innerHTML = content.content;
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          } else {
+            console.error('Modal content not found for:', modalId);
+          }
+        });
       });
-    });
+
+      // Close modal
+      const closeModal = () => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+
+      closeBtn.addEventListener('click', closeModal);
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal();
+      });
+
+      // ESC key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !overlay.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+    }
+
+
+
+
+
+    // ===== INITIALIZATION =====
+    async function initializeApp() {
+      // Initialize Bitcoin price from API
+      await BitcoinAPI.initializePrice();
+
+      // Refresh price button
+      document.getElementById('refresh-price')?.addEventListener('click', async () => {
+        const button = document.getElementById('refresh-price');
+        if (button) {
+          button.style.opacity = '0.5';
+          button.style.pointerEvents = 'none';
+        }
+
+        await BitcoinAPI.initializePrice();
+
+        if (button) {
+          button.style.opacity = '1';
+          button.style.pointerEvents = 'auto';
+        }
+      });
+
+      initModals();
+      InputManager.initRealTimeInputs();
+      UIManager.updateAll();
+
+      // Update last updated timestamp
+      const lastUpdatedEl = document.getElementById('last-updated');
+      if (lastUpdatedEl) {
+        lastUpdatedEl.textContent = new Date().toLocaleDateString();
+      }
+    }
 
     // Initialize everything when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      updateAll();
-      // Update last updated timestamp
-      document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
-    });
+    document.addEventListener('DOMContentLoaded', initializeApp);
 
-    // Initialize immediately as well
-    updateAll();
-    document.getElementById('last-updated').textContent = new Date().toLocaleDateString();
+    // Initialize immediately as well (for hot reload)
+    initializeApp();
 
-    // Fetch live price
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
-      .then(r => r.json())
-      .then(d => {
-        btcPrice = d.bitcoin.usd;
-        document.getElementById('btc-price').textContent = '$' + btcPrice.toLocaleString();
-        document.getElementById('btc-value').textContent = formatCurrency(btcAmount * btcPrice);
-        updateAll();
-      })
-      .catch(() => {
-        console.log('Using default BTC price');
-        updateAll();
-      });
+    // REMOVED: Duplicate Bitcoin price fetching - using BitcoinAPI.initializePrice() instead
   </script>
 </BaseLayout>
