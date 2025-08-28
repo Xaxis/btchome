@@ -2,6 +2,7 @@ import React from 'react';
 import ProjectionChart from '../features/chart/ProjectionChart';
 import ChartControls from '../features/chart/ChartControls';
 import KPIs from '../features/kpis/KPIs';
+import ModelYourPathPanel from '../components/ModelYourPathPanel';
 import { StepConnector } from '../components/VerticalStepper';
 import { useStore } from '../state/store';
 import { ChartLine, Trophy, ArrowUp } from '@phosphor-icons/react';
@@ -50,7 +51,12 @@ export default function BottomPane() {
             <ProjectionChart />
           </div>
 
-          {/* Second Panel: Strategy Comparison */}
+          {/* Second Panel: Model Your Path - Interactive Controls */}
+          <div className="mb-12">
+            <ModelYourPathPanel />
+          </div>
+
+          {/* Third Panel: Strategy Comparison */}
           <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg p-8">
             <h3 className="text-xl font-semibold text-primary mb-6 flex items-center gap-3">
               <span className="p-2 rounded-lg bg-blue-500/10 text-blue-600">

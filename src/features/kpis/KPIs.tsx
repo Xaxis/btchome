@@ -14,7 +14,7 @@ export default function KPIs() {
   const holdAll = res.holdAllValue[idx];
   const buyHouse = res.buyHouseValue[idx];
   const rentForever = res.rentForeverValue[idx];
-  const worstDelta = Math.min(holdAll, buyHouse, rentForever) - Math.max(holdAll, buyHouse, rentForever);
+  const opportunityCost = Math.max(holdAll, buyHouse, rentForever) - Math.min(holdAll, buyHouse, rentForever);
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -22,7 +22,7 @@ export default function KPIs() {
         { label: 'Hold All Bitcoin', value: holdAll, modal: 'hold-bitcoin-info', color: 'text-orange-600' },
         { label: 'Buy House', value: buyHouse, modal: 'buy-house-info', color: 'text-emerald-600' },
         { label: 'Rent Forever', value: rentForever, modal: 'rent-forever-info', color: 'text-sky-600' },
-        { label: 'Opportunity Cost', value: worstDelta, modal: 'opportunity-cost-info', color: 'text-red-600' },
+        { label: 'Opportunity Cost', value: opportunityCost, modal: 'opportunity-cost-info', color: 'text-red-600' },
       ].map((k) => (
         <div key={k.label} className="group rounded-xl border border-default bg-surface-1 p-4 shadow-md hover:shadow-lg hover:border-strong transition-all duration-200">
           <div className="flex items-start justify-between mb-3">
