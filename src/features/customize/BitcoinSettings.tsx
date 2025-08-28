@@ -10,16 +10,10 @@ export default function BitcoinSettings() {
   const dcaPeriod = useStore((st) => st.dcaPeriod);
   const modelConfidence = useStore((st) => st.modelConfidence);
   const capGainsTaxRate = useStore((st) => st.capGainsTaxRate);
-  const fetchPrice = useStore((st) => st.fetchPrice);
+  const loading = useStore((st) => st.loading);
+  const refreshPrice = useStore((st) => st.refreshPrice);
   const setState = (useStore as any).setState;
-  const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-
-  async function refreshPrice() {
-    setLoading(true); setErr(null);
-    try { await fetchPrice(); } catch (e:any) { setErr(e?.message || 'Failed'); }
-    setLoading(false);
-  }
 
   return (
     <div className="space-y-6">
