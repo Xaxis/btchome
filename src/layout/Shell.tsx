@@ -2,10 +2,14 @@ import React, { useEffect } from 'react';
 import { useStore } from '../state/store';
 import { Sun, Moon } from '@phosphor-icons/react';
 import InfoModal from '../features/modals/InfoModal';
+import { formatCurrencyFull } from '../utils/format';
 
 export default function Shell({ children }: { children: React.ReactNode }) {
   const theme = useStore((s) => s.theme);
   const setTheme = useStore((s) => s.setTheme);
+  const btcPrice = useStore((s) => s.btcPrice);
+  const loading = useStore((s) => s.loading);
+  const refreshPrice = useStore((s) => s.refreshPrice);
 
   useEffect(() => {
     // initialize from localStorage
@@ -20,18 +24,26 @@ export default function Shell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-surface text-primary">
       <header className="px-6 py-4 border-b border-subtle bg-surface-1 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex items-baseline gap-0">
-              <span className="text-xl font-bold text-brand">BTC</span>
-              <span className="text-xl font-semibold text-slate-600 dark:text-slate-300">Home</span>
-            </div>
-            <div className="hidden sm:block w-px h-6 bg-border-default"></div>
-            <div className="hidden sm:block text-sm text-slate-500 dark:text-slate-400 font-medium">
-              Smart Financial Decisions
-            </div>
+          <div className="flex items-baseline gap-0">
+            <span className="text-xl font-bold text-orange-600">BTC</span>
+            <span className="text-xl font-semibold text-slate-600 dark:text-slate-300">Home</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-muted font-medium">Theme</span>
+            {/* Live BTC Widget */}
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-default bg-surface-2 hover:bg-surface-3 transition-all duration-200 text-sm font-medium">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span className="font-mono text-secondary">{formatCurrencyFull(btcPrice)}</span>
+              <button
+                onClick={refreshPrice}
+                disabled={loading}
+                className="text-muted hover:text-secondary transition-colors disabled:opacity-50"
+                title="Refresh Bitcoin price"
+              >
+                {loading ? '⟳' : '↻'}
+              </button>
+            </div>
+
+            {/* Theme Toggle */}
             <div className="relative">
               <button
                 className="flex items-center gap-2 px-3 py-2 rounded-lg border border-default bg-surface-2 hover:bg-surface-3 focus-ring transition-all duration-200 text-sm font-medium group"

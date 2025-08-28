@@ -101,7 +101,7 @@ export const useStore = create<Store>((set, get) => ({
     } catch {}
 
     // Then fetch fresh price in background
-    await this.fetchPrice();
+    await get().fetchPrice();
   },
   set(partial: Partial<Store>) {
     set(partial);

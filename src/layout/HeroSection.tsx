@@ -45,11 +45,11 @@ export default function HeroSection() {
             <div className="p-3 rounded-xl bg-orange-500/10 text-orange-600">
               <ChartLineUp size={32} weight="duotone" />
             </div>
-            <h1 className="text-4xl font-bold text-primary">Bitcoin vs Real Estate Strategy</h1>
+            <h1 className="text-4xl font-bold text-primary">Bitcoin vs Home Buying Strategy</h1>
           </div>
           <p className="text-lg text-secondary max-w-2xl mx-auto">
-            Compare holding Bitcoin against buying a house or renting forever.
-            Make informed financial decisions with data-driven projections.
+            Should you hold Bitcoin or buy a home? Compare strategies and
+            make informed decisions with data-driven projections.
           </p>
         </div>
 
@@ -84,8 +84,6 @@ export default function HeroSection() {
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">BTC</span>
                 </div>
-
-
 
                 {err && (
                   <div className="text-sm text-red-600 flex items-center gap-1">
@@ -172,62 +170,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Contextual Information Bar - Aligned with inputs above */}
-          <div className="mt-8 p-4 rounded-xl bg-surface-2 border border-subtle">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 text-sm">
-              {/* Bitcoin Holdings Info - Column 1 */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-muted">Live:</span>
-                  <span className="font-mono font-semibold text-primary">{formatCurrencyFull(btcPrice)}</span>
-                </div>
-                <button
-                  onClick={refreshPrice}
-                  disabled={loading}
-                  className="p-1.5 rounded-lg bg-surface-3 hover:bg-surface-1 text-muted hover:text-secondary transition-all duration-200 disabled:opacity-50"
-                  title="Refresh price"
-                >
-                  {loading ? '⟳' : '↻'}
-                </button>
-              </div>
 
-              {/* Model Info - Column 2 */}
-              <div className="text-center text-muted">
-                <span className="text-secondary font-medium">
-                  {model === 'power-law' && 'Power Law Model'}
-                  {model === 'saylor' && 'Saylor Model'}
-                  {model === 'log-reg' && 'Log Regression'}
-                  {model === 's2f' && 'Stock-to-Flow'}
-                  {model === 'metcalfe' && 'Metcalfe Law'}
-                </span>
-              </div>
-
-              {/* Timeframe Info - Column 3 */}
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <span className="text-muted">Period:</span>
-                  <span className="text-secondary font-medium">
-                    {new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}
-                  </span>
-                </div>
-              </div>
-
-              {/* Confidence Info - Column 4 */}
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-2 text-sm">
-                  <span className="text-muted">Mode:</span>
-                  <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                    modelConfidence < 1 ? 'bg-blue-500/10 text-blue-600' :
-                    modelConfidence > 1 ? 'bg-red-500/10 text-red-600' :
-                    'bg-green-500/10 text-green-600'
-                  }`}>
-                    {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* Row 3: Summary Cards - Aligned with columns above */}
           <div className="mt-8 pt-6 border-t border-subtle">
