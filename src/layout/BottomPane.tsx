@@ -2,7 +2,6 @@ import React from 'react';
 import ProjectionChart from '../features/chart/ProjectionChart';
 import ChartControls from '../features/chart/ChartControls';
 import KPIs from '../features/kpis/KPIs';
-import StrategyConfiguration from './StrategyConfiguration';
 import { StepConnector } from '../components/VerticalStepper';
 import { useStore } from '../state/store';
 
@@ -38,7 +37,7 @@ export default function BottomPane() {
         isActive={false}
       />
 
-      {/* Step 4: Results and Configuration */}
+      {/* Step 4: Results */}
       <section className="results-gradient relative">
         {/* Local spine segment for final section - behind cards but visible under text */}
         <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-[1]">
@@ -46,16 +45,11 @@ export default function BottomPane() {
         </div>
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
           {/* KPIs Section */}
-          <div className="mb-16">
-            <div className="text-center mb-12 spine-text-area">
-              <h2 className="text-3xl font-bold text-primary mb-4">Strategy Comparison</h2>
-              <p className="text-lg text-secondary">Final wealth comparison after {timeframeYears} years</p>
-            </div>
-            <KPIs />
+          <div className="text-center mb-12 spine-text-area">
+            <h2 className="text-3xl font-bold text-primary mb-4">Strategy Comparison</h2>
+            <p className="text-lg text-secondary">Final wealth comparison after {timeframeYears} years</p>
           </div>
-
-          {/* Advanced Configuration */}
-          <StrategyConfiguration />
+          <KPIs />
         </div>
       </section>
     </div>

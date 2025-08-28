@@ -48,7 +48,7 @@ export default function App() {
           sectionId="projection-section"
         />
 
-        {/* Step 3 & 4: Strategy Projection and Configuration */}
+        {/* Step 3 & 4: Strategy Projection and Results */}
         <ConnectedSection>
           <div id="projection-section">
             <BottomPane />

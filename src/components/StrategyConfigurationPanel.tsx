@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { House, Buildings, TrendUp } from '@phosphor-icons/react';
+import { House, Buildings, TrendUp, Gear, CaretDown, CaretUp } from '@phosphor-icons/react';
 import BitcoinSettings from '../features/customize/BitcoinSettings';
 import HomeSettings from '../features/customize/HomeSettings';
 import RentSettings from '../features/customize/RentSettings';
@@ -28,33 +28,49 @@ const sections = [
   },
 ] as const;
 
-export default function StrategyConfiguration() {
+export default function StrategyConfigurationPanel() {
   const [activeSection, setActiveSection] = useState<typeof sections[number]['id']>('bitcoin');
+  const [isExpanded, setIsExpanded] = useState(false);
   const ActiveComp = sections.find((s) => s.id === activeSection)!.Comp;
 
   return (
-    <section className="hero-gradient relative">
-      {/* Local spine segment - behind cards but visible under text */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-[1]">
-        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
-      </div>
-      <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
-        {/* Header */}
-        <div className="text-center mb-12 spine-text-area">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 rounded-xl bg-brand/10 text-brand">
-              <TrendUp size={32} weight="duotone" />
+    <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg overflow-hidden">
+      {/* Collapsible Panel Header */}
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full p-6 text-left hover:bg-surface-2 transition-colors duration-200 focus-ring"
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="p-2 rounded-lg bg-brand/10 text-brand">
+              <Gear size={24} weight="duotone" />
+            </span>
+            <div>
+              <h2 className="text-xl font-semibold text-primary mb-1">
+                Configure Your Strategy
+              </h2>
+              <p className="text-secondary text-sm">
+                Fine-tune the parameters for each strategy to match your specific situation and goals.
+              </p>
             </div>
-            <h2 className="text-3xl font-bold text-primary">Configure Your Strategy</h2>
           </div>
-          <p className="text-lg text-secondary max-w-2xl mx-auto">
-            Fine-tune the parameters for each strategy to match your specific situation and goals.
-          </p>
+          <div className="flex items-center gap-2 text-muted">
+            <span className="text-xs font-medium">
+              {isExpanded ? 'Collapse' : 'Expand'}
+            </span>
+            {isExpanded ? (
+              <CaretUp size={20} weight="bold" />
+            ) : (
+              <CaretDown size={20} weight="bold" />
+            )}
+          </div>
         </div>
+      </button>
 
-        {/* Integrated Card with Tabs */}
-        <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg overflow-hidden">
-          {/* Card Header with Integrated Tabs */}
+      {/* Expandable Content */}
+      {isExpanded && (
+        <div className="border-t border-subtle">
+          {/* Integrated Tabs */}
           <div className="border-b border-subtle">
             <div className="flex flex-wrap">
               {sections.map((section) => {
@@ -85,7 +101,7 @@ export default function StrategyConfiguration() {
             </div>
           </div>
 
-          {/* Card Content */}
+          {/* Panel Content */}
           <div className="p-8">
             <div className="mb-6">
               <h3 className="text-xl font-semibold text-primary mb-2">
@@ -99,7 +115,7 @@ export default function StrategyConfiguration() {
             <ActiveComp />
           </div>
         </div>
-      </div>
-    </section>
+      )}
+    </div>
   );
 }

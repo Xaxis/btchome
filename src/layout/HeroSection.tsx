@@ -3,6 +3,7 @@ import { useStore } from '../state/store';
 import { formatCurrencyFull } from '../utils/format';
 import { TrendUp, Coins, Calendar } from '@phosphor-icons/react';
 import { LabelWithInfo } from '../components/InfoIcon';
+import StrategyConfigurationPanel from '../components/StrategyConfigurationPanel';
 
 export default function HeroSection() {
   const btcPrice = useStore((s) => s.btcPrice);
@@ -31,12 +32,17 @@ export default function HeroSection() {
 
   return (
     <section className="hero-gradient relative">
-      {/* Spine segment from top to panel top */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: 'calc(100% - 400px)' }}>
+      {/* Spine segment from top to first panel */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: 'calc(100% - 700px)' }}>
         <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
       </div>
 
-      {/* Spine segment from panel bottom to section bottom */}
+      {/* Short spine segment between the two panels */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 z-[1]" style={{ top: 'calc(100% - 460px)', height: '48px' }}>
+        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+      </div>
+
+      {/* Spine segment from second panel bottom to section bottom */}
       <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-[1]" style={{ height: '80px' }}>
         <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
       </div>
@@ -253,6 +259,11 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Strategy Configuration Panel */}
+        <div className="mt-12">
+          <StrategyConfigurationPanel />
         </div>
       </div>
     </section>
