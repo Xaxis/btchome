@@ -17,22 +17,38 @@ interface StepConnectorProps {
   isActive?: boolean;
   isCompleted?: boolean;
   className?: string;
+  sectionId?: string; // For scroll navigation
 }
 
 export function StepConnector({
   title,
   isActive = false,
   isCompleted = false,
-  className = ''
+  className = '',
+  sectionId
 }: StepConnectorProps) {
   // Determine circle and icon styling based on state
-  const circleClasses = `step-circle w-12 h-12 rounded-full flex items-center justify-center ${
+  const circleClasses = `step-circle w-10 h-10 rounded-full flex items-center justify-center ${
     isCompleted ? 'step-circle-completed' : isActive ? 'step-circle-active' : 'step-circle-default'
   }`;
 
   const iconClasses = `step-icon ${
     isCompleted ? 'step-icon-completed' : isActive ? 'step-icon-active' : 'step-icon-default'
   }`;
+
+  // Handle click to scroll to section
+  const handleClick = () => {
+    if (sectionId) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+    }
+  };
 
   return (
     <div className={`relative h-0 pointer-events-none ${className}`} aria-hidden="true">
@@ -43,18 +59,14 @@ export function StepConnector({
 
       {/* Step icon centered on spine at this seam */}
       <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-[10]">
-        <div className={circleClasses}>
-          <CaretDown size={16} weight="bold" className={iconClasses} />
-        </div>
-      </div>
-
-      {/* Title below the icon, centered */}
-      <div className="absolute left-1/2 top-8 -translate-x-1/2">
-        <div className={`text-xs font-medium tracking-wide whitespace-nowrap ${
-          isActive ? 'text-primary' : isCompleted ? 'text-emerald-500' : 'text-muted'
-        }`}>
-          {title}
-        </div>
+        <button
+          className={circleClasses}
+          onClick={handleClick}
+          aria-label={`Navigate to ${title} section`}
+          title={`Go to ${title}`}
+        >
+          <CaretDown size={14} weight="bold" className={iconClasses} />
+        </button>
       </div>
     </div>
   );

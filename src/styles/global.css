@@ -149,84 +149,66 @@ html {
   opacity: 0.9;
 }
 
-/* Source ring - elegant and minimal */
+/* Source ring - matches spine line opacity and prominence */
 .spine-ring {
   width: 36px;
   height: 36px;
   border-radius: 9999px;
-  border: 1.5px solid var(--border);
+  border: 2px solid var(--border-strong);
   background: var(--surface-1);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   position: relative;
 }
 .spine-ring::before {
   content: '';
   position: absolute;
-  inset: 4px;
+  inset: 3px;
   border-radius: 9999px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border);
   background: transparent;
+  opacity: 0.6;
 }
 .dark .spine-ring {
   box-shadow: var(--shadow-md);
 }
-/* Step circle styling - subtle yet apparent, complementing Bitcoin theme */
+/* Step circle styling - following app's interactive element patterns */
 .step-circle {
   position: relative;
-  background: var(--surface-1);
-  backdrop-filter: blur(8px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all 0.2s ease-out;
 }
 
-.step-circle::before {
-  content: '';
-  position: absolute;
-  inset: 2px;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, var(--surface-2), var(--surface-3));
-  opacity: 0.6;
-  transition: opacity 0.3s ease;
+.step-circle:hover {
+  background: var(--surface-3);
+  border-color: var(--border);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
-.step-circle::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent 60%);
-  pointer-events: none;
-}
-
-/* Step circle states */
+/* Step circle states - subtle progression */
 .step-circle-default {
-  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  border-color: var(--border-subtle);
   box-shadow: var(--shadow-sm);
 }
 
 .step-circle-active {
-  border: 1.5px solid var(--brand-500);
-  box-shadow: var(--shadow-brand);
-}
-.step-circle-active::before {
-  background: linear-gradient(135deg, var(--brand-500)/10, var(--brand-600)/15);
-  opacity: 1;
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
 }
 
 .step-circle-completed {
-  border: 1.5px solid var(--success);
-  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.15);
-}
-.step-circle-completed::before {
-  background: linear-gradient(135deg, var(--success)/10, var(--success-dark)/15);
-  opacity: 1;
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
 }
 
-/* Step circle icon styling */
+/* Step circle icon styling - consistent with app patterns */
 .step-icon {
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
+  transition: all 0.2s ease-out;
 }
 
 .step-icon-default {
@@ -234,13 +216,11 @@ html {
 }
 
 .step-icon-active {
-  color: var(--brand-500);
-  transform: scale(1.05);
+  color: var(--text-secondary);
 }
 
 .step-icon-completed {
-  color: var(--success);
-  transform: scale(1.05);
+  color: var(--text-secondary);
 }
 
 /* Text areas get subtle backdrop so spine shows slightly behind */

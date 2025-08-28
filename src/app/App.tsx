@@ -24,27 +24,35 @@ export default function App() {
 
         {/* Step 1: Initial Configuration */}
         <ConnectedSection>
-          <HeroSection />
+          <div id="hero-section">
+            <HeroSection />
+          </div>
         </ConnectedSection>
 
         <StepConnector
           title="Purchase Planning"
           isActive={true}
+          sectionId="purchase-section"
         />
 
         {/* Step 2: Purchase Planning */}
         <ConnectedSection>
-          <PurchasePlanningSection />
+          <div id="purchase-section">
+            <PurchasePlanningSection />
+          </div>
         </ConnectedSection>
 
         <StepConnector
           title="Strategy Analysis"
           isActive={false}
+          sectionId="projection-section"
         />
 
         {/* Step 3 & 4: Strategy Projection and Configuration */}
         <ConnectedSection>
-          <BottomPane />
+          <div id="projection-section">
+            <BottomPane />
+          </div>
         </ConnectedSection>
 
         <Footer />
