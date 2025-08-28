@@ -32,18 +32,8 @@ export default function HeroSection() {
 
   return (
     <section className="hero-gradient relative">
-      {/* Spine segment from top to first panel */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: 'calc(100% - 700px)' }}>
-        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
-      </div>
-
-      {/* Short spine segment between the two panels */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 z-[1]" style={{ top: 'calc(100% - 460px)', height: '48px' }}>
-        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
-      </div>
-
-      {/* Spine segment from second panel bottom to section bottom */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-[1]" style={{ height: '80px' }}>
+      {/* Local spine segment - behind cards but visible under text */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-[1]">
         <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
       </div>
 
@@ -152,11 +142,6 @@ export default function HeroSection() {
                   <span>1 year</span>
                   <span>30 years</span>
                 </div>
-
-                <div className="mt-4 text-center">
-                  <div className="text-2xl font-bold text-primary">{timeframeYears}</div>
-                  <div className="text-sm text-muted">years</div>
-                </div>
               </div>
             </div>
 
@@ -183,51 +168,59 @@ export default function HeroSection() {
                   <span>Conservative</span>
                   <span>Aggressive</span>
                 </div>
-
-                <div className="mt-4 text-center">
-                  <div className="text-2xl font-bold text-orange-600">{Math.round(modelConfidence * 100)}%</div>
-                  <div className="text-sm text-muted">confidence</div>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* Row 2: Informational Items - Aligned with inputs above */}
-          <div className="mt-8">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-              {/* Bitcoin Holdings Info */}
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted">Current Price:</span>
+          {/* Contextual Information Bar */}
+          <div className="mt-8 p-4 rounded-xl bg-surface-2 border border-subtle">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
+              {/* Left: Live Price */}
+              <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono font-medium text-secondary">{formatCurrencyFull(btcPrice)}</span>
-                  <button
-                    onClick={refreshPrice}
-                    disabled={loading}
-                    className="p-1 rounded text-muted hover:text-secondary transition-colors disabled:opacity-50"
-                    title="Refresh price"
-                  >
-                    {loading ? '⟳' : '↻'}
-                  </button>
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-muted">Live BTC:</span>
+                  <span className="font-mono font-semibold text-primary">{formatCurrencyFull(btcPrice)}</span>
+                </div>
+                <button
+                  onClick={refreshPrice}
+                  disabled={loading}
+                  className="p-1.5 rounded-lg bg-surface-3 hover:bg-surface-1 text-muted hover:text-secondary transition-all duration-200 disabled:opacity-50"
+                  title="Refresh price"
+                >
+                  {loading ? '⟳' : '↻'}
+                </button>
+              </div>
+
+              {/* Center: Model & Period */}
+              <div className="flex items-center gap-6 text-muted">
+                <div className="flex items-center gap-2">
+                  <span>Model:</span>
+                  <span className="text-secondary font-medium">
+                    {model === 'power-law' && 'Power Law'}
+                    {model === 'saylor' && 'Saylor'}
+                    {model === 'log-reg' && 'Log Regression'}
+                    {model === 's2f' && 'Stock-to-Flow'}
+                    {model === 'metcalfe' && 'Metcalfe'}
+                  </span>
+                </div>
+                <div className="hidden sm:block w-px h-4 bg-border-default"></div>
+                <div className="flex items-center gap-2">
+                  <span>Period:</span>
+                  <span className="text-secondary font-medium">{new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}</span>
                 </div>
               </div>
 
-              {/* Model Info */}
-              <div className="text-sm text-muted text-center">
-                {model === 'power-law' && 'Historical power-law growth pattern'}
-                {model === 'saylor' && 'Institutional adoption model'}
-                {model === 'log-reg' && 'Conservative diminishing returns'}
-                {model === 's2f' && 'Scarcity-based halving cycles'}
-                {model === 'metcalfe' && 'Network adoption correlation'}
-              </div>
-
-              {/* Timeframe Info */}
-              <div className="text-sm text-muted text-center">
-                Analysis Period: {new Date().getFullYear()} - {new Date().getFullYear() + timeframeYears}
-              </div>
-
-              {/* Confidence Info */}
-              <div className="text-sm text-muted text-center">
-                Projection: {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
+              {/* Right: Confidence */}
+              <div className="flex items-center gap-2">
+                <span className="text-muted">Confidence:</span>
+                <span className={`px-2 py-1 rounded-md text-xs font-medium ${
+                  modelConfidence < 1 ? 'bg-blue-500/10 text-blue-600' :
+                  modelConfidence > 1 ? 'bg-red-500/10 text-red-600' :
+                  'bg-green-500/10 text-green-600'
+                }`}>
+                  {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
+                </span>
               </div>
             </div>
           </div>
@@ -263,7 +256,7 @@ export default function HeroSection() {
         </div>
 
         {/* Strategy Configuration Panel */}
-        <div className="mt-12">
+        <div className="mt-12 relative z-10">
           <StrategyConfigurationPanel />
         </div>
       </div>
