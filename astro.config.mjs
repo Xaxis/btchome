@@ -1,14 +1,20 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+
+import react from '@astrojs/react';
+
+import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()],
-  output: 'static',
-  site: 'https://wilneeley.github.io',
-  base: '/btchome',
-  build: {
-    assets: 'assets'
+  integrations: [react()],
+
+  server: {
+    port: 8642,
+    host: true
+  },
+
+  vite: {
+    plugins: [tailwindcss()]
   }
 });

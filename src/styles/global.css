@@ -1,0 +1,172 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import '@fontsource-variable/inter/index.css';
+
+html {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: var(--bg);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+body {
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Classes */
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-subtle { color: var(--text-subtle); }
+
+/* Surface Classes */
+.bg-surface { background: var(--bg); }
+.bg-surface-1 { background: var(--surface-1); }
+.bg-surface-2 { background: var(--surface-2); }
+.bg-surface-3 { background: var(--surface-3); }
+.bg-surface-4 { background: var(--surface-4); }
+
+/* Border Classes */
+.border-subtle { border-color: var(--border-subtle); }
+.border-default { border-color: var(--border); }
+.border-strong { border-color: var(--border-strong); }
+
+/* Brand Classes */
+.text-brand { color: var(--brand-500); }
+.bg-brand { background: var(--brand-500); }
+.border-brand { border-color: var(--brand-500); }
+
+/* Interactive States */
+.hover-overlay:hover { background: var(--hover-overlay); }
+.active-overlay:active { background: var(--active-overlay); }
+.focus-ring:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Shadows */
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+.shadow-brand { box-shadow: var(--shadow-brand); }
+
+/* KPI Numbers */
+.kpi-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "ss01" 1;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+}
+
+/* Custom Slider */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  border: 2px solid var(--surface-1);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background: var(--brand-600);
+  box-shadow: var(--shadow-brand);
+  transform: scale(1.1);
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--brand-500);
+  border: 2px solid var(--surface-1);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  background: var(--brand-600);
+  box-shadow: var(--shadow-brand);
+  transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoom-in-95 {
+  from { transform: scale(0.95); }
+  to { transform: scale(1); }
+}
+
+.animate-in {
+  animation-fill-mode: both;
+}
+
+.fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+.zoom-in-95 {
+  animation: zoom-in-95 0.2s ease-out;
+}
+
+.duration-200 {
+  animation-duration: 0.2s;
+}
+
+/* Section Transitions */
+.section-transition {
+  background: linear-gradient(180deg,
+    var(--surface-1) 0%,
+    var(--surface-2) 50%,
+    var(--surface-1) 100%
+  );
+  transition: all 0.6s ease-in-out;
+}
+
+/* Smooth scrolling for step navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced gradients for sections */
+.hero-gradient {
+  background: linear-gradient(135deg,
+    var(--brand-50) 0%,
+    var(--surface-1) 30%,
+    var(--surface-2) 100%
+  );
+}
+
+.purchase-gradient {
+  background: linear-gradient(135deg,
+    rgba(16, 185, 129, 0.05) 0%,
+    var(--surface-1) 30%,
+    var(--surface-2) 100%
+  );
+}
+
+.projection-gradient {
+  background: linear-gradient(135deg,
+    rgba(14, 165, 233, 0.05) 0%,
+    var(--surface-1) 30%,
+    var(--surface-2) 100%
+  );
+}
+
+.results-gradient {
+  background: linear-gradient(135deg,
+    rgba(147, 51, 234, 0.05) 0%,
+    var(--surface-1) 30%,
+    var(--surface-2) 100%
+  );
+}

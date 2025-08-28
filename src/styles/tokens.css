@@ -1,0 +1,122 @@
+:root {
+  --font-sans: InterVariable, Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Spacing & Layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  /* Bitcoin Orange Brand Scale */
+  --brand-50: #FFF7ED;
+  --brand-100: #FFEDD5;
+  --brand-200: #FED7AA;
+  --brand-300: #FDBA74;
+  --brand-400: #FB923C;
+  --brand-500: #F7931A;  /* Primary Bitcoin Orange */
+  --brand-600: #EA580C;
+  --brand-700: #C2410C;
+  --brand-800: #9A3412;
+  --brand-900: #7C2D12;
+
+  /* Semantic Colors */
+  --success-light: #DCFCE7;
+  --success: #16A34A;
+  --success-dark: #15803D;
+
+  --warning-light: #FEF3C7;
+  --warning: #D97706;
+  --warning-dark: #B45309;
+
+  --error-light: #FEE2E2;
+  --error: #DC2626;
+  --error-dark: #B91C1C;
+
+  --info-light: #DBEAFE;
+  --info: #2563EB;
+  --info-dark: #1D4ED8;
+
+  /* Chart Colors - Optimized for clarity */
+  --chart-hodl: var(--brand-500);
+  --chart-buy: #059669;    /* Emerald-600 */
+  --chart-rent: #0284C7;   /* Sky-600 */
+  --chart-opportunity: #DC2626; /* Red-600 */
+}
+
+[data-theme="dark"] {
+  /* Dark Theme - Sophisticated Bitcoin-inspired palette */
+  --bg: #0A0C0F;              /* Deep charcoal base */
+  --surface-1: #111419;       /* Primary surface */
+  --surface-2: #1A1F26;       /* Elevated surface */
+  --surface-3: #242B34;       /* Highest surface */
+  --surface-4: #2D3540;       /* Interactive surface */
+
+  --text-primary: #F8FAFC;    /* High contrast text */
+  --text-secondary: #CBD5E1;  /* Secondary text */
+  --text-muted: #94A3B8;      /* Muted text */
+  --text-subtle: #64748B;     /* Subtle text */
+
+  --border-subtle: #1E293B;   /* Subtle borders */
+  --border: #334155;          /* Default borders */
+  --border-strong: #475569;   /* Strong borders */
+
+  --accent-warm: #FED7AA;     /* Warm accent (brand-200) */
+  --accent-cool: #A5B4FC;     /* Cool accent (indigo-300) */
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.20);
+  --shadow-brand: 0 8px 32px rgba(247, 147, 26, 0.15);
+
+  /* Interactive States */
+  --hover-overlay: rgba(248, 250, 252, 0.05);
+  --active-overlay: rgba(248, 250, 252, 0.10);
+  --focus-ring: rgba(247, 147, 26, 0.40);
+
+  /* Chart & Data Visualization */
+  --chart-hodl: #F7931A;
+  --chart-buy: #10B981;       /* Emerald-500 */
+  --chart-rent: #3B82F6;      /* Blue-500 */
+  --chart-opportunity: #EF4444; /* Red-500 */
+  --gridline: #1E293B;
+}
+
+[data-theme="light"] {
+  /* Light Theme - Clean, professional palette */
+  --bg: #FEFEFE;              /* Pure white base */
+  --surface-1: #FFFFFF;       /* Primary surface */
+  --surface-2: #F8FAFC;       /* Elevated surface */
+  --surface-3: #F1F5F9;       /* Highest surface */
+  --surface-4: #E2E8F0;       /* Interactive surface */
+
+  --text-primary: #0F172A;    /* High contrast text */
+  --text-secondary: #334155;  /* Secondary text */
+  --text-muted: #64748B;      /* Muted text */
+  --text-subtle: #94A3B8;     /* Subtle text */
+
+  --border-subtle: #F1F5F9;   /* Subtle borders */
+  --border: #E2E8F0;          /* Default borders */
+  --border-strong: #CBD5E1;   /* Strong borders */
+
+  --accent-warm: #FB923C;     /* Warm accent (brand-400) */
+  --accent-cool: #6366F1;     /* Cool accent (indigo-500) */
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.10);
+  --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.12);
+  --shadow-brand: 0 4px 20px rgba(247, 147, 26, 0.20);
+
+  /* Interactive States */
+  --hover-overlay: rgba(15, 23, 42, 0.04);
+  --active-overlay: rgba(15, 23, 42, 0.08);
+  --focus-ring: rgba(247, 147, 26, 0.50);
+
+  /* Chart & Data Visualization */
+  --chart-hodl: #EA580C;      /* Brand-600 for better contrast */
+  --chart-buy: #059669;       /* Emerald-600 */
+  --chart-rent: #0284C7;      /* Sky-600 */
+  --chart-opportunity: #DC2626; /* Red-600 */
+  --gridline: #F1F5F9;
+}
+
