@@ -53,7 +53,7 @@ export function StepConnector({
   return (
     <div className={`relative h-0 pointer-events-none ${className}`} aria-hidden="true">
       {/* Spine continuation above and below the circle */}
-      <div className="absolute left-1/2 -translate-x-1/2 z-[1]" style={{ top: '-50px', height: '100px' }}>
+      <div className="absolute left-1/2 -translate-x-1/2 z-[1]" style={{ top: '-52px', height: '104px' }}>
         <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
       </div>
 

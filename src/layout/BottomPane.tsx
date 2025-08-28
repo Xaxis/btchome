@@ -75,15 +75,14 @@ export default function BottomPane() {
       {/* Final Terminating Circle - Back to Top */}
       <div className="relative pb-20 projection-gradient">
         {/* Extended spine line to terminating circle */}
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: '56px' }}>
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: '64px' }}>
           <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
         </div>
 
         {/* Terminating Circle - Back to Top Button */}
         <div className="flex justify-center pt-16">
-          <div className="relative">
-            {/* Background circle to hide spine line */}
-            <div className="absolute inset-0 w-16 h-16 -m-2 rounded-full bg-surface-1 z-[5]"></div>
+          <div className="relative -mt-px">
+
 
             <button
               onClick={scrollToTop}
