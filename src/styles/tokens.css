@@ -48,8 +48,11 @@
   /* Dark Theme - Sophisticated Bitcoin-inspired palette */
   --bg: #0A0C0F;              /* Deep charcoal base */
   --surface-1: #111419;       /* Primary surface */
+  --surface-1-rgb: 17, 20, 25;
   --surface-2: #1A1F26;       /* Elevated surface */
+  --surface-2-rgb: 26, 31, 38;
   --surface-3: #242B34;       /* Highest surface */
+  --surface-3-rgb: 36, 43, 52;
   --surface-4: #2D3540;       /* Interactive surface */
 
   --text-primary: #F8FAFC;    /* High contrast text */
@@ -86,8 +89,11 @@
   /* Light Theme - Clean, professional palette */
   --bg: #FEFEFE;              /* Pure white base */
   --surface-1: #FFFFFF;       /* Primary surface */
+  --surface-1-rgb: 255, 255, 255;
   --surface-2: #F8FAFC;       /* Elevated surface */
+  --surface-2-rgb: 248, 250, 252;
   --surface-3: #F1F5F9;       /* Highest surface */
+  --surface-3-rgb: 241, 245, 249;
   --surface-4: #E2E8F0;       /* Interactive surface */
 
   --text-primary: #0F172A;    /* High contrast text */
