@@ -250,6 +250,80 @@ html {
   border-radius: 8px;
   padding: 0.5rem 1rem;
 }
+
+/* Section-specific theming system */
+:root {
+  /* Purchase Planning Section - Emerald Green Theme */
+  --purchase-primary: #10B981;
+  --purchase-secondary: #059669;
+  --purchase-light: #D1FAE5;
+  --purchase-bg: rgba(16, 185, 129, 0.1);
+  --purchase-border: rgba(16, 185, 129, 0.2);
+
+  /* Hero Section - Bitcoin Orange Theme */
+  --hero-primary: #F7931A;
+  --hero-secondary: #EA580C;
+  --hero-light: #FED7AA;
+  --hero-bg: rgba(247, 147, 26, 0.1);
+  --hero-border: rgba(247, 147, 26, 0.2);
+
+  /* Projection Section - Blue Theme */
+  --projection-primary: #3B82F6;
+  --projection-secondary: #2563EB;
+  --projection-light: #DBEAFE;
+  --projection-bg: rgba(59, 130, 246, 0.1);
+  --projection-border: rgba(59, 130, 246, 0.2);
+
+  /* Strategy Configuration Section - Bitcoin Orange Theme (matches hero) */
+  --strategy-primary: #F7931A;
+  --strategy-secondary: #EA580C;
+  --strategy-light: #FED7AA;
+  --strategy-bg: rgba(247, 147, 26, 0.1);
+  --strategy-border: rgba(247, 147, 26, 0.2);
+}
+
+/* Purchase section slider styling */
+.purchase-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--surface-3);
+  border-radius: 6px;
+  height: 12px;
+  outline: none;
+}
+
+.purchase-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--purchase-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.purchase-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.purchase-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--purchase-primary);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+}
+
+.purchase-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
 /* Enhanced gradients for sections with smooth transitions */
 .hero-gradient {
   background: linear-gradient(180deg,

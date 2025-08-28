@@ -2,15 +2,18 @@ import React from 'react';
 import { useStore } from '../state/store';
 import { House, Calendar, CurrencyDollar } from '@phosphor-icons/react';
 import { LabelWithInfo } from '../components/InfoIcon';
-import { formatCurrencyFull } from '../utils/format';
+import { formatCurrencyFull, formatBTC } from '../utils/format';
 
 export default function PurchasePlanningSection() {
   const homePrice = useStore((s) => s.homePrice);
   const downPct = useStore((s) => s.downPct);
   const purchaseTiming = useStore((s) => s.purchaseTiming);
+  const btcPrice = useStore((s) => s.btcPrice);
   const setState = (useStore as any).setState;
 
   const downPaymentAmount = homePrice * downPct;
+  const homePriceInBTC = homePrice / btcPrice;
+  const downPaymentInBTC = downPaymentAmount / btcPrice;
 
   return (
     <section className="purchase-gradient relative">
@@ -32,17 +35,18 @@ export default function PurchasePlanningSection() {
           </p>
         </div>
 
-        {/* Home Purchase Inputs */}
+        {/* Unified Home Purchase Panel */}
         <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg p-8 mb-12">
-          <h3 className="text-xl font-semibold text-primary mb-6 flex items-center gap-3">
+          <h3 className="text-xl font-semibold text-primary mb-8 flex items-center gap-3">
             <span className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600">
               <CurrencyDollar size={24} weight="duotone" />
             </span>
-            Home Purchase Details
+            Purchase Details
           </h3>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Home Price */}
+          {/* Input Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            {/* Home Price Input */}
             <div className="space-y-4">
               <LabelWithInfo
                 label="Home Price"
@@ -51,27 +55,20 @@ export default function PurchasePlanningSection() {
                 className="mb-3"
               />
 
-              <div className="space-y-3">
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">$</span>
-                  <input
-                    type="number"
-                    step="10000"
-                    className="w-full text-2xl font-bold pl-8 pr-4 py-4 rounded-xl bg-surface-2 border border-default text-primary focus-ring hover:border-strong transition-all duration-200 text-center"
-                    value={homePrice}
-                    onChange={(e) => setState({ homePrice: Math.max(0, parseFloat(e.target.value) || 0) })}
-                    placeholder="500000"
-                  />
-                </div>
-
-                <div className="p-3 rounded-lg bg-surface-3 border border-subtle">
-                  <div className="text-xs text-muted mb-1">Formatted Price</div>
-                  <div className="text-lg font-bold text-emerald-600">{formatCurrencyFull(homePrice)}</div>
-                </div>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">$</span>
+                <input
+                  type="number"
+                  step="10000"
+                  className="w-full text-2xl font-bold pl-8 pr-4 py-4 rounded-xl bg-surface-2 border border-default text-primary focus-ring hover:border-strong transition-all duration-200 text-center"
+                  value={homePrice}
+                  onChange={(e) => setState({ homePrice: Math.max(0, parseFloat(e.target.value) || 0) })}
+                  placeholder="500000"
+                />
               </div>
             </div>
 
-            {/* Down Payment Percentage */}
+            {/* Down Payment Percentage Input */}
             <div className="space-y-4">
               <LabelWithInfo
                 label="Down Payment Percentage"
@@ -80,33 +77,45 @@ export default function PurchasePlanningSection() {
                 className="mb-3"
               />
 
-              <div className="space-y-4">
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="5"
-                    max="50"
-                    step="1"
-                    className="w-full h-3 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
-                    value={Math.round(downPct * 100)}
-                    onChange={(e) => setState({ downPct: parseInt(e.target.value, 10) / 100 })}
-                  />
-                  <div className="flex justify-between text-xs text-muted mt-2">
-                    <span>5%</span>
-                    <span>50%</span>
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-emerald-600">{Math.round(downPct * 100)}%</div>
-                  <div className="text-sm text-muted">of home price</div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-surface-3 border border-subtle text-center">
-                  <div className="text-xs text-muted mb-1">Down Payment Amount</div>
-                  <div className="text-lg font-bold text-primary">{formatCurrencyFull(downPaymentAmount)}</div>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="5"
+                  max="50"
+                  step="1"
+                  className="purchase-slider w-full cursor-pointer"
+                  value={Math.round(downPct * 100)}
+                  onChange={(e) => setState({ downPct: parseInt(e.target.value, 10) / 100 })}
+                />
+                <div className="flex justify-between text-xs text-muted mt-2">
+                  <span>5%</span>
+                  <span>50%</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Feedback Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Home Price - USD & BTC */}
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-center">
+              <div className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">Home Price</div>
+              <div className="text-xl font-bold text-emerald-600 mb-1">{formatCurrencyFull(homePrice)}</div>
+              <div className="text-sm font-medium text-emerald-600/70">{formatBTC(homePriceInBTC, 2)}</div>
+            </div>
+
+            {/* Down Payment Percentage Display */}
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-center">
+              <div className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">Down Payment</div>
+              <div className="text-xl font-bold text-emerald-600">{Math.round(downPct * 100)}%</div>
+              <div className="text-xs text-emerald-600/80">of home price</div>
+            </div>
+
+            {/* Down Payment Amount - USD & BTC */}
+            <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-center">
+              <div className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">Amount Needed</div>
+              <div className="text-xl font-bold text-emerald-600 mb-1">{formatCurrencyFull(downPaymentAmount)}</div>
+              <div className="text-sm font-medium text-emerald-600/70">{formatBTC(downPaymentInBTC, 3)}</div>
             </div>
           </div>
         </div>
@@ -161,9 +170,9 @@ export default function PurchasePlanningSection() {
 
           <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
             <div className="text-sm text-emerald-700 dark:text-emerald-300">
-              <strong>Impact:</strong> {purchaseTiming === 'now'
-                ? 'Buying now means selling Bitcoin immediately for the down payment, but you stop paying rent right away.'
-                : `Waiting ${purchaseTiming.split('-')[1]} year(s) allows your Bitcoin to appreciate more, but you'll continue paying rent during this time.`
+              <strong>Strategy:</strong> {purchaseTiming === 'now'
+                ? 'Immediate purchase maximizes time building home equity and eliminates rent payments, but requires selling Bitcoin at current prices.'
+                : `Delaying ${purchaseTiming.split('-')[1]} year(s) allows Bitcoin to potentially appreciate while you continue renting, creating a timing vs. opportunity cost trade-off.`
               }
             </div>
           </div>
