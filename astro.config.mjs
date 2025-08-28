@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://btchome.app',
   integrations: [react()],
 
   server: {
@@ -16,5 +17,13 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+
+  // Optimize for production deployment
+  build: {
+    inlineStylesheets: 'auto',
+  },
+
+  // Enable SPA mode for client-side routing
+  output: 'static',
 });

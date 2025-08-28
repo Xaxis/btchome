@@ -174,8 +174,8 @@ export default function HeroSection() {
 
           {/* Contextual Information Bar */}
           <div className="mt-8 p-4 rounded-xl bg-surface-2 border border-subtle">
-            <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
-              {/* Left: Live Price */}
+            <div className="flex flex-wrap items-center gap-6 text-sm">
+              {/* Live Price */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -192,26 +192,34 @@ export default function HeroSection() {
                 </button>
               </div>
 
-              {/* Center: Model & Period */}
-              <div className="flex items-center gap-6 text-muted">
-                <div className="flex items-center gap-2">
-                  <span>Model:</span>
-                  <span className="text-secondary font-medium">
-                    {model === 'power-law' && 'Power Law'}
-                    {model === 'saylor' && 'Saylor'}
-                    {model === 'log-reg' && 'Log Regression'}
-                    {model === 's2f' && 'Stock-to-Flow'}
-                    {model === 'metcalfe' && 'Metcalfe'}
-                  </span>
-                </div>
-                <div className="hidden sm:block w-px h-4 bg-border-default"></div>
-                <div className="flex items-center gap-2">
-                  <span>Period:</span>
-                  <span className="text-secondary font-medium">{new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}</span>
-                </div>
+              {/* Separator */}
+              <div className="w-px h-4 bg-border-default"></div>
+
+              {/* Model */}
+              <div className="flex items-center gap-2 text-muted">
+                <span>Model:</span>
+                <span className="text-secondary font-medium">
+                  {model === 'power-law' && 'Power Law'}
+                  {model === 'saylor' && 'Saylor'}
+                  {model === 'log-reg' && 'Log Regression'}
+                  {model === 's2f' && 'Stock-to-Flow'}
+                  {model === 'metcalfe' && 'Metcalfe'}
+                </span>
               </div>
 
-              {/* Right: Confidence */}
+              {/* Separator */}
+              <div className="w-px h-4 bg-border-default"></div>
+
+              {/* Period */}
+              <div className="flex items-center gap-2 text-muted">
+                <span>Period:</span>
+                <span className="text-secondary font-medium">{new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}</span>
+              </div>
+
+              {/* Separator */}
+              <div className="w-px h-4 bg-border-default"></div>
+
+              {/* Confidence */}
               <div className="flex items-center gap-2">
                 <span className="text-muted">Confidence:</span>
                 <span className={`px-2 py-1 rounded-md text-xs font-medium ${
