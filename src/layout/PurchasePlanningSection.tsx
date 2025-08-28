@@ -13,8 +13,12 @@ export default function PurchasePlanningSection() {
   const downPaymentAmount = homePrice * downPct;
 
   return (
-    <section className="purchase-gradient border-y border-subtle">
-      <div className="mx-auto max-w-7xl px-6 py-16">
+    <section className="purchase-gradient relative">
+      {/* Local spine segment beneath content */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-0">
+        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+      </div>
+      <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -40,18 +44,18 @@ export default function PurchasePlanningSection() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Home Price */}
             <div className="space-y-4">
-              <LabelWithInfo 
+              <LabelWithInfo
                 label="Home Price"
                 infoTitle="Home Purchase Price"
                 infoContent="The total purchase price of the home you're considering. This affects how much Bitcoin you'll need to sell for the down payment and your overall mortgage amount. Consider your local market conditions and future appreciation potential."
                 className="mb-3"
               />
-              
+
               <div className="space-y-3">
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">$</span>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="10000"
                     className="w-full text-2xl font-bold pl-8 pr-4 py-4 rounded-xl bg-surface-2 border border-default text-primary focus-ring hover:border-strong transition-all duration-200 text-center"
                     value={homePrice}
@@ -59,7 +63,7 @@ export default function PurchasePlanningSection() {
                     placeholder="500000"
                   />
                 </div>
-                
+
                 <div className="p-3 rounded-lg bg-surface-3 border border-subtle">
                   <div className="text-xs text-muted mb-1">Formatted Price</div>
                   <div className="text-lg font-bold text-emerald-600">{formatCurrencyFull(homePrice)}</div>
@@ -69,19 +73,19 @@ export default function PurchasePlanningSection() {
 
             {/* Down Payment Percentage */}
             <div className="space-y-4">
-              <LabelWithInfo 
+              <LabelWithInfo
                 label="Down Payment Percentage"
                 infoTitle="Down Payment Percentage"
                 infoContent="The percentage of the home price you'll pay upfront. Higher down payments reduce monthly mortgage payments and eliminate PMI, but require selling more Bitcoin. Typical ranges are 10-20% (with PMI) or 20%+ (no PMI)."
                 className="mb-3"
               />
-              
+
               <div className="space-y-4">
                 <div className="relative">
-                  <input 
-                    type="range" 
-                    min="5" 
-                    max="50" 
+                  <input
+                    type="range"
+                    min="5"
+                    max="50"
                     step="1"
                     className="w-full h-3 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
                     value={Math.round(downPct * 100)}
@@ -92,12 +96,12 @@ export default function PurchasePlanningSection() {
                     <span>50%</span>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-3xl font-bold text-emerald-600">{Math.round(downPct * 100)}%</div>
                   <div className="text-sm text-muted">of home price</div>
                 </div>
-                
+
                 <div className="p-3 rounded-lg bg-surface-3 border border-subtle text-center">
                   <div className="text-xs text-muted mb-1">Down Payment Amount</div>
                   <div className="text-lg font-bold text-primary">{formatCurrencyFull(downPaymentAmount)}</div>
@@ -128,7 +132,7 @@ export default function PurchasePlanningSection() {
               { value: 'year-5', label: 'Year 5', description: 'Buy in 5 years', year: 5 },
             ].map((option) => {
               const isSelected = purchaseTiming === option.value;
-              
+
               return (
                 <button
                   key={option.value}
@@ -145,7 +149,7 @@ export default function PurchasePlanningSection() {
                     {option.label}
                   </div>
                   <div className="text-sm text-muted">{option.description}</div>
-                  
+
                   {/* Selection indicator */}
                   {isSelected && (
                     <div className="mt-2 w-2 h-2 bg-emerald-500 rounded-full mx-auto" />
@@ -157,7 +161,7 @@ export default function PurchasePlanningSection() {
 
           <div className="p-4 rounded-lg bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20">
             <div className="text-sm text-emerald-700 dark:text-emerald-300">
-              <strong>Impact:</strong> {purchaseTiming === 'now' 
+              <strong>Impact:</strong> {purchaseTiming === 'now'
                 ? 'Buying now means selling Bitcoin immediately for the down payment, but you stop paying rent right away.'
                 : `Waiting ${purchaseTiming.split('-')[1]} year(s) allows your Bitcoin to appreciate more, but you'll continue paying rent during this time.`
               }

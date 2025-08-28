@@ -12,7 +12,7 @@ export default function HeroSection() {
   const modelConfidence = useStore((s) => s.modelConfidence);
   const fetchPrice = useStore((s) => s.fetchPrice);
   const setState = (useStore as any).setState;
-  
+
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -30,15 +30,22 @@ export default function HeroSection() {
   const currentValue = btcAmount * btcPrice;
 
   return (
-    <section className="hero-gradient border-b border-subtle">
-      <div className="mx-auto max-w-7xl px-6 py-12">
+    <section className="hero-gradient relative">
+      {/* Source ring and local spine segment under content */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-3 z-0">
+        <div className="spine-ring"></div>
+      </div>
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[40px] bottom-0 z-0">
+        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+      </div>
+      <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-primary mb-4">
             Bitcoin vs Real Estate Strategy
           </h1>
           <p className="text-lg text-secondary max-w-2xl mx-auto">
-            Compare holding Bitcoin against buying a house or renting forever. 
+            Compare holding Bitcoin against buying a house or renting forever.
             Make informed financial decisions with data-driven projections.
           </p>
         </div>
@@ -61,11 +68,11 @@ export default function HeroSection() {
                 infoContent="Enter the amount of Bitcoin you currently own. This will be used as the baseline for all strategy comparisons. You can enter fractional amounts (e.g., 0.5 BTC). The current USD value will be calculated automatically using live market prices."
                 className="mb-3"
               />
-              
+
               <div className="space-y-3">
                 <div className="relative">
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     step="0.001"
                     className="w-full text-2xl font-bold px-4 py-4 rounded-xl bg-surface-2 border border-default text-primary focus-ring hover:border-strong transition-all duration-200 text-center"
                     value={btcAmount}
@@ -74,12 +81,12 @@ export default function HeroSection() {
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">BTC</span>
                 </div>
-                
+
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-muted">Current Price:</span>
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-medium text-secondary">{formatCurrencyFull(btcPrice)}</span>
-                    <button 
+                    <button
                       onClick={refreshPrice}
                       disabled={loading}
                       className="p-1 rounded text-muted hover:text-secondary transition-colors disabled:opacity-50"
@@ -89,12 +96,12 @@ export default function HeroSection() {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="p-3 rounded-lg bg-surface-3 border border-subtle">
                   <div className="text-xs text-muted mb-1">Current Value</div>
                   <div className="text-lg font-bold text-brand">{formatCurrencyFull(currentValue)}</div>
                 </div>
-                
+
                 {err && (
                   <div className="text-sm text-red-600 flex items-center gap-1">
                     ⚠️ {err}
@@ -111,8 +118,8 @@ export default function HeroSection() {
                 infoContent="Choose how Bitcoin's future price should be projected. Power Law uses historical growth patterns (most optimistic). Saylor Model reflects institutional adoption scenarios. Log Regression assumes diminishing returns over time. Stock-to-Flow is based on Bitcoin's scarcity and halving cycles. Metcalfe's Law correlates price with network adoption."
                 className="mb-3"
               />
-              
-              <select 
+
+              <select
                 className="w-full text-lg font-medium px-4 py-4 rounded-xl bg-surface-2 border border-default text-primary focus-ring hover:border-strong transition-all duration-200"
                 value={model}
                 onChange={(e) => setState({ model: e.target.value as any })}
@@ -123,7 +130,7 @@ export default function HeroSection() {
                 <option value="s2f">Stock-to-Flow (Cyclical)</option>
                 <option value="metcalfe">Metcalfe's Law (Network)</option>
               </select>
-              
+
               <div className="space-y-2 text-sm text-muted">
                 {model === 'power-law' && (
                   <p>Based on Bitcoin's historical power-law growth pattern. Most optimistic projections.</p>
@@ -151,13 +158,13 @@ export default function HeroSection() {
                 infoContent="Set how many years into the future to project. Longer timeframes show the power of compound growth but become less reliable. Most financial advisors recommend 5-10 year horizons for major decisions like home purchases. Consider your personal timeline and risk tolerance."
                 className="mb-3"
               />
-              
+
               <div className="space-y-4">
                 <div className="relative">
-                  <input 
-                    type="range" 
-                    min="1" 
-                    max="30" 
+                  <input
+                    type="range"
+                    min="1"
+                    max="30"
                     step="1"
                     className="w-full h-3 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
                     value={timeframeYears}
@@ -168,12 +175,12 @@ export default function HeroSection() {
                     <span>30 years</span>
                   </div>
                 </div>
-                
+
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">{timeframeYears}</div>
                   <div className="text-sm text-muted">years</div>
                 </div>
-                
+
                 <div className="p-3 rounded-lg bg-surface-3 border border-subtle text-center">
                   <div className="text-xs text-muted mb-1">Analysis Period</div>
                   <div className="text-sm font-medium text-secondary">

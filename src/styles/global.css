@@ -138,35 +138,130 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Enhanced gradients for sections */
+/* Center spine utilities */
+.spine-line {
+  width: 2px;
+  background: var(--border);
+  opacity: 0.45;
+}
+.dark .spine-line { opacity: 0.5; }
+
+.spine-ring {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  border: 2px solid var(--border);
+  background: transparent;
+  box-shadow: 0 0 10px rgba(0,0,0,0.06);
+}
+.dark .spine-ring { box-shadow: 0 0 12px rgba(255,255,255,0.08); }
+
+/* Enhanced gradients for sections with smooth transitions */
 .hero-gradient {
-  background: linear-gradient(135deg,
-    var(--brand-50) 0%,
-    var(--surface-1) 30%,
-    var(--surface-2) 100%
+  background: linear-gradient(180deg,
+    var(--surface-1) 0%,
+    rgba(249, 115, 22, 0.03) 20%,
+    var(--surface-1) 80%,
+    var(--surface-1) 100%
   );
+  position: relative;
+}
+
+.hero-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, transparent 0%, var(--surface-1) 100%);
+  pointer-events: none;
 }
 
 .purchase-gradient {
-  background: linear-gradient(135deg,
-    rgba(16, 185, 129, 0.05) 0%,
-    var(--surface-1) 30%,
-    var(--surface-2) 100%
+  background: linear-gradient(180deg,
+    var(--surface-1) 0%,
+    rgba(16, 185, 129, 0.03) 20%,
+    rgba(16, 185, 129, 0.05) 50%,
+    rgba(16, 185, 129, 0.03) 80%,
+    var(--surface-1) 100%
   );
+  position: relative;
+}
+
+.purchase-gradient::before, .hero-gradient::before, .projection-gradient::before, .results-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, var(--surface-1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.purchase-gradient::after, .hero-gradient::after, .projection-gradient::after, .results-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, transparent 0%, var(--surface-1) 100%);
+  pointer-events: none;
 }
 
 .projection-gradient {
-  background: linear-gradient(135deg,
-    rgba(14, 165, 233, 0.05) 0%,
-    var(--surface-1) 30%,
-    var(--surface-2) 100%
+  background: linear-gradient(180deg,
+    var(--surface-1) 0%,
+    rgba(14, 165, 233, 0.03) 20%,
+    rgba(14, 165, 233, 0.05) 50%,
+    rgba(14, 165, 233, 0.03) 80%,
+    var(--surface-1) 100%
   );
+  position: relative;
+}
+
+.projection-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, var(--surface-1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.projection-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, transparent 0%, var(--surface-1) 100%);
+  pointer-events: none;
 }
 
 .results-gradient {
-  background: linear-gradient(135deg,
-    rgba(147, 51, 234, 0.05) 0%,
-    var(--surface-1) 30%,
-    var(--surface-2) 100%
+  background: linear-gradient(180deg,
+    var(--surface-1) 0%,
+    rgba(147, 51, 234, 0.03) 20%,
+    rgba(147, 51, 234, 0.05) 50%,
+    rgba(147, 51, 234, 0.03) 80%,
+    var(--surface-1) 100%
   );
+  position: relative;
+}
+
+.results-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(180deg, var(--surface-1) 0%, transparent 100%);
+  pointer-events: none;
 }
