@@ -30,6 +30,11 @@ export function StepConnector({
 
   return (
     <div className={`relative h-0 pointer-events-none ${className}`} aria-hidden="true">
+      {/* Spine continuation above and below the circle */}
+      <div className="absolute left-1/2 -translate-x-1/2 z-[1]" style={{ top: '-50px', height: '100px' }}>
+        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+      </div>
+
       {/* Step icon centered on spine at this seam */}
       <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-[10]">
         <div className={`
@@ -44,7 +49,7 @@ export function StepConnector({
       </div>
 
       {/* Title below the icon, centered */}
-      <div className="absolute left-1/2 top-7 -translate-x-1/2">
+      <div className="absolute left-1/2 top-8 -translate-x-1/2">
         <div className={`text-xs font-medium tracking-wide whitespace-nowrap ${
           isActive ? 'text-primary' : isCompleted ? 'text-emerald-500' : 'text-muted'
         }`}>

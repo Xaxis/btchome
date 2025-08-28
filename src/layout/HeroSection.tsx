@@ -31,16 +31,20 @@ export default function HeroSection() {
 
   return (
     <section className="hero-gradient relative">
-      {/* Source ring and local spine segment under content */}
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-3 z-0">
-        <div className="spine-ring"></div>
-      </div>
-      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[40px] bottom-0 z-0">
+      {/* Spine segment from top to panel top */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: 'calc(100% - 400px)' }}>
         <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
       </div>
+
+      {/* Spine segment from panel bottom to section bottom */}
+      <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 z-[1]" style={{ height: '80px' }}>
+        <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+      </div>
+
       <div className="mx-auto max-w-7xl px-6 py-16 md:py-20">
         {/* Header */}
-        <div className="text-center mb-12">
+
+        <div className="text-center mb-12 spine-text-area">
           <h1 className="text-4xl font-bold text-primary mb-4">
             Bitcoin vs Real Estate Strategy
           </h1>
@@ -51,7 +55,7 @@ export default function HeroSection() {
         </div>
 
         {/* Primary Inputs */}
-        <div className="bg-surface-1 rounded-2xl border border-default shadow-lg p-8">
+        <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg p-8">
           <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-3">
             <span className="p-2 rounded-lg bg-brand/10 text-brand">
               <Coins size={24} weight="duotone" />

@@ -3,6 +3,7 @@ import { useStore } from '../state/store';
 import Shell from '../layout/Shell';
 import HeroSection from '../layout/HeroSection';
 import PurchasePlanningSection from '../layout/PurchasePlanningSection';
+import TopSpineSpacer from '../layout/TopSpineSpacer';
 import BottomPane from '../layout/BottomPane';
 import Footer from '../layout/Footer';
 import { StepConnector, ConnectedSection, AppWithSpine } from '../components/VerticalStepper';
@@ -18,6 +19,9 @@ export default function App() {
   return (
     <AppWithSpine>
       <Shell>
+        {/* Spine spacer between header and first section */}
+        <TopSpineSpacer />
+
         {/* Step 1: Initial Configuration */}
         <ConnectedSection>
           <HeroSection />

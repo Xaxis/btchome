@@ -15,18 +15,18 @@ export default function BottomPane() {
     <div>
       {/* Step 3: Strategy Projection */}
       <section className="projection-gradient relative">
-        {/* Local spine segment beneath content */}
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-0">
+        {/* Local spine segment - behind cards but visible under text */}
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-[1]">
           <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
         </div>
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 spine-text-area">
             <h2 className="text-3xl font-bold text-primary mb-4">Strategy Projection</h2>
             <p className="text-lg text-secondary">See how your Bitcoin compares to real estate over time</p>
           </div>
 
           {/* Chart with integrated controls */}
-          <div className="bg-surface-1 rounded-2xl border border-default shadow-lg overflow-hidden">
+          <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg overflow-hidden">
             <ChartControls />
             <ProjectionChart />
           </div>
@@ -40,14 +40,14 @@ export default function BottomPane() {
 
       {/* Step 4: Results and Configuration */}
       <section className="results-gradient relative">
-        {/* Local spine segment beneath content - trimmed so it terminates at the step circle above */}
-        <div className={`pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-0 ${lastStepTrimClass}`}>
-          <div className="spine-line absolute left-1/2 -translate-x-1/2 h-[calc(100%-24px)]"></div>
+        {/* Local spine segment for final section - behind cards but visible under text */}
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 bottom-0 z-[1]">
+          <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
         </div>
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
           {/* KPIs Section */}
           <div className="mb-16">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 spine-text-area">
               <h2 className="text-3xl font-bold text-primary mb-4">Strategy Comparison</h2>
               <p className="text-lg text-secondary">Final wealth comparison after {timeframeYears} years</p>
             </div>

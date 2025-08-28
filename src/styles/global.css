@@ -141,10 +141,13 @@ html {
 /* Center spine utilities */
 .spine-line {
   width: 2px;
-  background: var(--border);
-  opacity: 0.45;
+  background: #f97316;
+  opacity: 1;
 }
-.dark .spine-line { opacity: 0.5; }
+.dark .spine-line {
+  background: #f97316;
+  opacity: 1;
+}
 
 .spine-ring {
   width: 40px;
@@ -156,6 +159,33 @@ html {
 }
 .dark .spine-ring { box-shadow: 0 0 12px rgba(255,255,255,0.08); }
 
+/* Text areas get subtle backdrop so spine shows slightly behind */
+.spine-text-area {
+  position: relative;
+  z-index: 2;
+}
+.spine-text-area::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(ellipse, var(--surface-1) 30%, transparent 70%);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Section headings get backdrop blur to show spine subtly behind */
+.section-heading {
+  position: relative;
+  backdrop-filter: blur(1px);
+  background: linear-gradient(135deg, var(--surface-1)/80, var(--surface-1)/60);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
 /* Enhanced gradients for sections with smooth transitions */
 .hero-gradient {
   background: linear-gradient(180deg,
