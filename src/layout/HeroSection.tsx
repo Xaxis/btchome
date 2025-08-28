@@ -95,25 +95,7 @@ export default function HeroSection() {
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 text-lg font-medium text-muted">BTC</span>
                 </div>
 
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted">Current Price:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-medium text-secondary">{formatCurrencyFull(btcPrice)}</span>
-                    <button
-                      onClick={refreshPrice}
-                      disabled={loading}
-                      className="p-1 rounded text-muted hover:text-secondary transition-colors disabled:opacity-50"
-                      title="Refresh price"
-                    >
-                      {loading ? '⟳' : '↻'}
-                    </button>
-                  </div>
-                </div>
 
-                <div className="p-3 rounded-lg bg-surface-3 border border-subtle">
-                  <div className="text-xs text-muted mb-1">Current Value</div>
-                  <div className="text-lg font-bold text-orange-600">{formatCurrencyFull(currentValue)}</div>
-                </div>
 
                 {err && (
                   <div className="text-sm text-red-600 flex items-center gap-1">
@@ -144,23 +126,7 @@ export default function HeroSection() {
                 <option value="metcalfe">Metcalfe's Law (Network)</option>
               </select>
 
-              <div className="space-y-2 text-sm text-muted">
-                {model === 'power-law' && (
-                  <p>Based on Bitcoin's historical power-law growth pattern. Most optimistic projections.</p>
-                )}
-                {model === 'saylor' && (
-                  <p>Michael Saylor's institutional adoption model. Balanced growth expectations.</p>
-                )}
-                {model === 'log-reg' && (
-                  <p>Logarithmic regression model. More conservative, diminishing returns.</p>
-                )}
-                {model === 's2f' && (
-                  <p>Stock-to-Flow model based on Bitcoin's scarcity and halving cycles.</p>
-                )}
-                {model === 'metcalfe' && (
-                  <p>Network value grows with the square of active users (Metcalfe's Law).</p>
-                )}
-              </div>
+
             </div>
 
             {/* Timeframe */}
@@ -172,33 +138,24 @@ export default function HeroSection() {
                 className="mb-3"
               />
 
-              <div className="space-y-4">
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="1"
-                    max="30"
-                    step="1"
-                    className="hero-slider w-full cursor-pointer"
-                    value={timeframeYears}
-                    onChange={(e) => setState({ timeframeYears: parseInt(e.target.value, 10) })}
-                  />
-                  <div className="flex justify-between text-xs text-muted mt-2">
-                    <span>1 year</span>
-                    <span>30 years</span>
-                  </div>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="1"
+                  max="30"
+                  step="1"
+                  className="hero-slider w-full cursor-pointer"
+                  value={timeframeYears}
+                  onChange={(e) => setState({ timeframeYears: parseInt(e.target.value, 10) })}
+                />
+                <div className="flex justify-between text-xs text-muted mt-2">
+                  <span>1 year</span>
+                  <span>30 years</span>
                 </div>
 
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary">{timeframeYears}</div>
+                <div className="mt-4 text-center">
+                  <div className="text-2xl font-bold text-primary">{timeframeYears}</div>
                   <div className="text-sm text-muted">years</div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-surface-3 border border-subtle text-center">
-                  <div className="text-xs text-muted mb-1">Analysis Period</div>
-                  <div className="text-sm font-medium text-secondary">
-                    {new Date().getFullYear()} - {new Date().getFullYear() + timeframeYears}
-                  </div>
                 </div>
               </div>
             </div>
@@ -212,53 +169,94 @@ export default function HeroSection() {
                 className="mb-3"
               />
 
-              <div className="space-y-4">
-                <div className="relative">
-                  <input
-                    type="range"
-                    min="50"
-                    max="150"
-                    step="5"
-                    className="hero-slider w-full cursor-pointer"
-                    value={Math.round(modelConfidence * 100)}
-                    onChange={(e) => setState({ modelConfidence: parseInt(e.target.value, 10) / 100 })}
-                  />
-                  <div className="flex justify-between text-xs text-muted mt-2">
-                    <span>Conservative</span>
-                    <span>Aggressive</span>
-                  </div>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="50"
+                  max="150"
+                  step="5"
+                  className="hero-slider w-full cursor-pointer"
+                  value={Math.round(modelConfidence * 100)}
+                  onChange={(e) => setState({ modelConfidence: parseInt(e.target.value, 10) / 100 })}
+                />
+                <div className="flex justify-between text-xs text-muted mt-2">
+                  <span>Conservative</span>
+                  <span>Aggressive</span>
                 </div>
 
-                <div className="text-center">
+                <div className="mt-4 text-center">
                   <div className="text-2xl font-bold text-orange-600">{Math.round(modelConfidence * 100)}%</div>
                   <div className="text-sm text-muted">confidence</div>
-                </div>
-
-                <div className="p-3 rounded-lg bg-surface-3 border border-subtle text-center">
-                  <div className="text-xs text-muted mb-1">Projection Multiplier</div>
-                  <div className="text-sm font-medium text-secondary">
-                    {modelConfidence < 1 ? 'Conservative' :
-                     modelConfidence > 1 ? 'Aggressive' : 'Standard'}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Row 2: Informational Items - Aligned with inputs above */}
+          <div className="mt-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Bitcoin Holdings Info */}
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-muted">Current Price:</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-medium text-secondary">{formatCurrencyFull(btcPrice)}</span>
+                  <button
+                    onClick={refreshPrice}
+                    disabled={loading}
+                    className="p-1 rounded text-muted hover:text-secondary transition-colors disabled:opacity-50"
+                    title="Refresh price"
+                  >
+                    {loading ? '⟳' : '↻'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Model Info */}
+              <div className="text-sm text-muted text-center">
+                {model === 'power-law' && 'Historical power-law growth pattern'}
+                {model === 'saylor' && 'Institutional adoption model'}
+                {model === 'log-reg' && 'Conservative diminishing returns'}
+                {model === 's2f' && 'Scarcity-based halving cycles'}
+                {model === 'metcalfe' && 'Network adoption correlation'}
+              </div>
+
+              {/* Timeframe Info */}
+              <div className="text-sm text-muted text-center">
+                Analysis Period: {new Date().getFullYear()} - {new Date().getFullYear() + timeframeYears}
+              </div>
+
+              {/* Confidence Info */}
+              <div className="text-sm text-muted text-center">
+                Projection: {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3: Summary Cards - Aligned with columns above */}
           <div className="mt-8 pt-6 border-t border-subtle">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <div className="p-4 rounded-lg bg-surface-2">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              {/* Bitcoin Holdings Card */}
+              <div className="p-4 rounded-lg bg-surface-2 text-center">
                 <div className="text-2xl font-bold text-orange-600 mb-1">{btcAmount.toFixed(3)}</div>
                 <div className="text-sm text-muted">Bitcoin Holdings</div>
               </div>
-              <div className="p-4 rounded-lg bg-surface-2">
-                <div className="text-2xl font-bold text-primary mb-1">{formatCurrencyFull(currentValue)}</div>
+
+              {/* Current Value Card */}
+              <div className="p-4 rounded-lg bg-surface-2 text-center">
+                <div className="text-2xl font-bold text-orange-600 mb-1">{formatCurrencyFull(currentValue)}</div>
                 <div className="text-sm text-muted">Current Value</div>
               </div>
-              <div className="p-4 rounded-lg bg-surface-2">
-                <div className="text-2xl font-bold text-secondary mb-1">{timeframeYears}Y</div>
+
+              {/* Analysis Period Card */}
+              <div className="p-4 rounded-lg bg-surface-2 text-center">
+                <div className="text-2xl font-bold text-orange-600 mb-1">{timeframeYears}Y</div>
                 <div className="text-sm text-muted">Analysis Period</div>
+              </div>
+
+              {/* Model Confidence Card */}
+              <div className="p-4 rounded-lg bg-surface-2 text-center">
+                <div className="text-2xl font-bold text-orange-600 mb-1">{Math.round(modelConfidence * 100)}%</div>
+                <div className="text-sm text-muted">Model Confidence</div>
               </div>
             </div>
           </div>

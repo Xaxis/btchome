@@ -4,12 +4,14 @@ import ChartControls from '../features/chart/ChartControls';
 import KPIs from '../features/kpis/KPIs';
 import { StepConnector } from '../components/VerticalStepper';
 import { useStore } from '../state/store';
-import { ChartLine, Trophy } from '@phosphor-icons/react';
+import { ChartLine, Trophy, ArrowUp } from '@phosphor-icons/react';
 
 export default function BottomPane() {
-  // Helper to compute whether this is the last step section; if so, trim the spine to terminate at circle top
-  const lastStepTrimClass = "after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-0 after:w-[2px] after:h-6 after:bg-transparent";
   const timeframeYears = useStore((s) => s.timeframeYears);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div>
@@ -64,7 +66,44 @@ export default function BottomPane() {
         </div>
       </section>
 
+      {/* Final Terminating Circle - Back to Top */}
+      <div className="relative pb-20 projection-gradient">
+        {/* Extended spine line to terminating circle */}
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: '88px' }}>
+          <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
+        </div>
 
+        {/* Terminating Circle - Back to Top Button */}
+        <div className="flex justify-center pt-16">
+          <div className="relative">
+            {/* Background circle to hide spine line */}
+            <div className="absolute inset-0 w-16 h-16 -m-2 rounded-full bg-surface-1 z-[5]"></div>
+
+            <button
+              onClick={scrollToTop}
+              className="group relative w-12 h-12 rounded-full bg-surface-1 border-2 border-default shadow-lg hover:shadow-xl hover:border-strong transition-all duration-300 focus-ring z-[10]"
+              aria-label="Back to top"
+            >
+              {/* Circle background with gradient on hover */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-surface-1 to-surface-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+              {/* Arrow icon */}
+              <div className="relative z-10 flex items-center justify-center h-full">
+                <ArrowUp
+                  size={20}
+                  weight="bold"
+                  className="text-secondary group-hover:text-primary transition-colors duration-300 group-hover:scale-110 transform transition-transform duration-300"
+                />
+              </div>
+
+              {/* Tooltip */}
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-surface-3 text-secondary text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+                Back to top
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

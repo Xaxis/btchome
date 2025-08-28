@@ -58,7 +58,7 @@ export function StepConnector({
       </div>
 
       {/* Step icon centered on spine at this seam */}
-      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-[10]">
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-[10] pointer-events-auto">
         <button
           className={circleClasses}
           onClick={handleClick}
