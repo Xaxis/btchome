@@ -172,14 +172,14 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Contextual Information Bar */}
+          {/* Contextual Information Bar - Aligned with inputs above */}
           <div className="mt-8 p-4 rounded-xl bg-surface-2 border border-subtle">
-            <div className="flex flex-wrap items-center gap-6 text-sm">
-              {/* Live Price */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 text-sm">
+              {/* Bitcoin Holdings Info - Column 1 */}
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-muted">Live BTC:</span>
+                  <span className="text-muted">Live:</span>
                   <span className="font-mono font-semibold text-primary">{formatCurrencyFull(btcPrice)}</span>
                 </div>
                 <button
@@ -192,43 +192,39 @@ export default function HeroSection() {
                 </button>
               </div>
 
-              {/* Separator */}
-              <div className="w-px h-4 bg-border-default"></div>
-
-              {/* Model */}
-              <div className="flex items-center gap-2 text-muted">
-                <span>Model:</span>
+              {/* Model Info - Column 2 */}
+              <div className="text-center text-muted">
                 <span className="text-secondary font-medium">
-                  {model === 'power-law' && 'Power Law'}
-                  {model === 'saylor' && 'Saylor'}
+                  {model === 'power-law' && 'Power Law Model'}
+                  {model === 'saylor' && 'Saylor Model'}
                   {model === 'log-reg' && 'Log Regression'}
                   {model === 's2f' && 'Stock-to-Flow'}
-                  {model === 'metcalfe' && 'Metcalfe'}
+                  {model === 'metcalfe' && 'Metcalfe Law'}
                 </span>
               </div>
 
-              {/* Separator */}
-              <div className="w-px h-4 bg-border-default"></div>
-
-              {/* Period */}
-              <div className="flex items-center gap-2 text-muted">
-                <span>Period:</span>
-                <span className="text-secondary font-medium">{new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}</span>
+              {/* Timeframe Info - Column 3 */}
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <span className="text-muted">Period:</span>
+                  <span className="text-secondary font-medium">
+                    {new Date().getFullYear()}-{new Date().getFullYear() + timeframeYears}
+                  </span>
+                </div>
               </div>
 
-              {/* Separator */}
-              <div className="w-px h-4 bg-border-default"></div>
-
-              {/* Confidence */}
-              <div className="flex items-center gap-2">
-                <span className="text-muted">Confidence:</span>
-                <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                  modelConfidence < 1 ? 'bg-blue-500/10 text-blue-600' :
-                  modelConfidence > 1 ? 'bg-red-500/10 text-red-600' :
-                  'bg-green-500/10 text-green-600'
-                }`}>
-                  {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
-                </span>
+              {/* Confidence Info - Column 4 */}
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-2 text-sm">
+                  <span className="text-muted">Mode:</span>
+                  <span className={`px-2 py-1 rounded-md text-xs font-medium ${
+                    modelConfidence < 1 ? 'bg-blue-500/10 text-blue-600' :
+                    modelConfidence > 1 ? 'bg-red-500/10 text-red-600' :
+                    'bg-green-500/10 text-green-600'
+                  }`}>
+                    {modelConfidence < 1 ? 'Conservative' : modelConfidence > 1 ? 'Aggressive' : 'Standard'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
