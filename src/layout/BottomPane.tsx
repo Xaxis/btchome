@@ -40,7 +40,7 @@ export default function BottomPane() {
                 <span className="p-2 rounded-lg bg-blue-500/10 text-blue-600">
                   <ChartLine size={24} weight="duotone" />
                 </span>
-                Interactive Projection Chart
+                Projection Chart
               </h3>
               <p className="text-secondary">
                 Visualize how each strategy performs over your selected timeframe with dynamic controls.
@@ -69,7 +69,7 @@ export default function BottomPane() {
       {/* Final Terminating Circle - Back to Top */}
       <div className="relative pb-20 projection-gradient">
         {/* Extended spine line to terminating circle */}
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: '88px' }}>
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-0 z-[1]" style={{ height: '56px' }}>
           <div className="spine-line absolute left-1/2 -translate-x-1/2 h-full"></div>
         </div>
 
@@ -81,7 +81,7 @@ export default function BottomPane() {
 
             <button
               onClick={scrollToTop}
-              className="group relative w-12 h-12 rounded-full bg-surface-1 border-2 border-default shadow-lg hover:shadow-xl hover:border-strong transition-all duration-300 focus-ring z-[10]"
+              className="group relative w-12 h-12 rounded-full bg-surface-1 border-2 border-default hover:border-strong transition-all duration-300 focus-ring z-[10]"
               aria-label="Back to top"
             >
               {/* Circle background with gradient on hover */}

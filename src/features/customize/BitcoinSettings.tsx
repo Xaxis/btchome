@@ -107,13 +107,13 @@ export default function BitcoinSettings() {
               min={50}
               max={150}
               step={1}
-              className="w-full h-2 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
+              className="w-full h-2 bg-surface-3 rounded-lg appearance-none cursor-pointer strategy-slider"
               value={Math.round(modelConfidence * 100)}
               onChange={(e)=> setState({ modelConfidence: clampNum(parseInt(e.target.value,10)/100, 0.5, 1.5) })}
             />
             <div className="flex justify-between text-xs text-muted">
               <span>Conservative (50%)</span>
-              <span className="font-medium text-brand">{Math.round(modelConfidence*100)}%</span>
+              <span className="font-medium text-orange-600">{Math.round(modelConfidence*100)}%</span>
               <span>Aggressive (150%)</span>
             </div>
           </div>

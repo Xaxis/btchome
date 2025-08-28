@@ -96,7 +96,8 @@ export default function PurchasePlanningSection() {
           </div>
 
           {/* Feedback Row */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="mt-8 pt-6 border-t border-subtle">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Home Price - USD & BTC */}
             <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-center">
               <div className="text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">Home Price</div>
@@ -117,6 +118,7 @@ export default function PurchasePlanningSection() {
               <div className="text-xl font-bold text-emerald-600 mb-1">{formatCurrencyFull(downPaymentAmount)}</div>
               <div className="text-sm font-medium text-emerald-600/70">{formatBTC(downPaymentInBTC, 3)}</div>
             </div>
+          </div>
           </div>
         </div>
 

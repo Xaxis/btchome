@@ -393,6 +393,49 @@ html {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
+
+/* Strategy section slider styling - matches hero orange theme */
+.strategy-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--surface-3);
+  border-radius: 6px;
+  height: 12px;
+  outline: none;
+}
+
+.strategy-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F7931A;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(247, 147, 26, 0.3);
+  transition: all 0.2s ease;
+}
+
+.strategy-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(247, 147, 26, 0.4);
+}
+
+.strategy-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F7931A;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(247, 147, 26, 0.3);
+  transition: all 0.2s ease;
+}
+
+.strategy-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(247, 147, 26, 0.4);
+}
 /* Enhanced gradients for sections with smooth transitions */
 .hero-gradient {
   background: linear-gradient(180deg,

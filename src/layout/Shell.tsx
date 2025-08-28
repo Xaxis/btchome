@@ -27,6 +27,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-baseline gap-0">
             <span className="text-xl font-bold text-orange-600">BTC</span>
             <span className="text-xl font-semibold text-slate-600 dark:text-slate-300">Home</span>
+            <sup className="text-xs font-medium text-orange-500 ml-1">BETA</sup>
           </div>
           <div className="flex items-center gap-3">
             {/* Live BTC Widget */}

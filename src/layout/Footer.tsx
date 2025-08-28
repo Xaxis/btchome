@@ -47,7 +47,7 @@ export default function Footer() {
               <span className="text-sm text-muted font-medium">Connect</span>
               <div className="flex items-center gap-2">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/Xaxis/btchome"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg border border-default bg-surface-2 hover:bg-surface-3 text-secondary hover:text-primary transition-all duration-200 focus-ring"
@@ -57,7 +57,7 @@ export default function Footer() {
                 </a>
 
                 <a
-                  href="https://x.com"
+                  href="https://x.com/TheBTCViking"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-lg border border-default bg-surface-2 hover:bg-surface-3 text-secondary hover:text-primary transition-all duration-200 focus-ring"
