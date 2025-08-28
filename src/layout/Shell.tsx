@@ -24,11 +24,14 @@ export default function Shell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-surface text-primary">
       <header className="px-6 py-4 border-b border-subtle bg-surface-1 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-0">
-            <span className="text-xl font-bold text-orange-600">BTC</span>
-            <span className="text-xl font-semibold text-slate-600 dark:text-slate-300">Home</span>
-            <sup className="text-xs font-medium text-orange-500 ml-1">BETA</sup>
-          </div>
+          <a href="/" className="flex items-center gap-2 select-none">
+            <img src="/btchome-logo.png" alt="BTCHome logo" className="h-9 w-9 rounded-sm" />
+            <div className="flex items-baseline gap-0">
+              <span className="text-xl font-bold text-orange-600">BTC</span>
+              <span className="text-xl font-semibold text-slate-600 dark:text-slate-300">Home</span>
+              <sup className="text-xs font-medium text-orange-500 ml-1">BETA</sup>
+            </div>
+          </a>
           <div className="flex items-center gap-3">
             {/* Live BTC Widget */}
             <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-default bg-surface-2 hover:bg-surface-3 transition-all duration-200 text-sm font-medium">
