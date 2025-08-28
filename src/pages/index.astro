@@ -1,0 +1,44 @@
+---
+import App from '../app/App.tsx';
+import '../styles/global.css';
+---
+
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>BTCHome - Bitcoin vs Home Buying Strategy Calculator</title>
+    <meta name="title" content="BTCHome - Bitcoin vs Home Buying Strategy Calculator" />
+    <meta name="description" content="Should you hold Bitcoin or buy a home? Compare wealth strategies with data-driven projections. Analyze Bitcoin vs real estate over time with live market data." />
+    <meta name="keywords" content="Bitcoin, home buying, real estate, investment calculator, wealth strategy, BTC price, financial planning" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://btchome.app/" />
+    <meta property="og:title" content="BTCHome - Bitcoin vs Home Buying Strategy Calculator" />
+    <meta property="og:description" content="Should you hold Bitcoin or buy a home? Compare wealth strategies with data-driven projections." />
+    <meta property="og:image" content="https://btchome.app/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://btchome.app/" />
+    <meta property="twitter:title" content="BTCHome - Bitcoin vs Home Buying Strategy Calculator" />
+    <meta property="twitter:description" content="Should you hold Bitcoin or buy a home? Compare wealth strategies with data-driven projections." />
+    <meta property="twitter:image" content="https://btchome.app/og-image.png" />
+
+    <!-- Additional Meta -->
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="English" />
+    <meta name="author" content="BTCHome" />
+    <link rel="canonical" href="https://btchome.app/" />
+  </head>
+  <body class="min-h-screen bg-[var(--bg)] text-[var(--text-high)]">
+    <div class="min-h-screen">
+      <App client:load />
+    </div>
+  </body>
+</html>
