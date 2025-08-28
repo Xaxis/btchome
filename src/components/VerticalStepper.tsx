@@ -25,8 +25,14 @@ export function StepConnector({
   isCompleted = false,
   className = ''
 }: StepConnectorProps) {
-  const borderColor = isCompleted ? 'border-emerald-500' : isActive ? 'border-brand' : 'border-border-default';
-  const textColor = isCompleted ? 'text-emerald-200' : isActive ? 'text-brand' : 'text-muted';
+  // Determine circle and icon styling based on state
+  const circleClasses = `step-circle w-12 h-12 rounded-full flex items-center justify-center ${
+    isCompleted ? 'step-circle-completed' : isActive ? 'step-circle-active' : 'step-circle-default'
+  }`;
+
+  const iconClasses = `step-icon ${
+    isCompleted ? 'step-icon-completed' : isActive ? 'step-icon-active' : 'step-icon-default'
+  }`;
 
   return (
     <div className={`relative h-0 pointer-events-none ${className}`} aria-hidden="true">
@@ -37,14 +43,8 @@ export function StepConnector({
 
       {/* Step icon centered on spine at this seam */}
       <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 z-[10]">
-        <div className={`
-          relative flex items-center justify-center w-14 h-14 rounded-full border-2 bg-transparent
-          ${borderColor}
-          ${isCompleted ? 'shadow-lg shadow-emerald-500/25' : isActive ? 'shadow-lg shadow-brand/25' : ''}
-        `}>
-          {/* Transparent center ring so the spine behind remains visible */}
-          <div className="absolute inset-1 rounded-full border border-white/10 bg-transparent" />
-          <CaretDown size={18} weight="bold" className={`${textColor}`} />
+        <div className={circleClasses}>
+          <CaretDown size={16} weight="bold" className={iconClasses} />
         </div>
       </div>
 
