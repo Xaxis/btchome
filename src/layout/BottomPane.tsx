@@ -4,6 +4,7 @@ import ChartControls from '../features/chart/ChartControls';
 import KPIs from '../features/kpis/KPIs';
 import { StepConnector } from '../components/VerticalStepper';
 import { useStore } from '../state/store';
+import { ChartLine, Trophy } from '@phosphor-icons/react';
 
 export default function BottomPane() {
   // Helper to compute whether this is the last step section; if so, trim the spine to terminate at circle top
@@ -20,7 +21,12 @@ export default function BottomPane() {
         </div>
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
           <div className="text-center mb-12 spine-text-area">
-            <h2 className="text-3xl font-bold text-primary mb-4">Strategy Projection</h2>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="p-3 rounded-xl bg-blue-500/10 text-blue-600">
+                <ChartLine size={32} weight="duotone" />
+              </div>
+              <h2 className="text-3xl font-bold text-primary">Strategy Projection</h2>
+            </div>
             <p className="text-lg text-secondary">See how your Bitcoin compares to real estate over time</p>
           </div>
 
@@ -33,7 +39,7 @@ export default function BottomPane() {
       </section>
 
       <StepConnector
-        title="Results & Configuration"
+        title="Results"
         isActive={false}
       />
 
@@ -46,7 +52,12 @@ export default function BottomPane() {
         <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
           {/* KPIs Section */}
           <div className="text-center mb-12 spine-text-area">
-            <h2 className="text-3xl font-bold text-primary mb-4">Strategy Comparison</h2>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/10 text-purple-600">
+                <Trophy size={32} weight="duotone" />
+              </div>
+              <h2 className="text-3xl font-bold text-primary">Strategy Comparison</h2>
+            </div>
             <p className="text-lg text-secondary">Final wealth comparison after {timeframeYears} years</p>
           </div>
           <KPIs />

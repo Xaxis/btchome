@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../state/store';
 import { formatCurrencyFull } from '../utils/format';
-import { TrendUp, Coins, Calendar } from '@phosphor-icons/react';
+import { TrendUp, Coins, Calendar, ChartLineUp } from '@phosphor-icons/react';
 import { LabelWithInfo } from '../components/InfoIcon';
 import StrategyConfigurationPanel from '../components/StrategyConfigurationPanel';
 
@@ -51,9 +51,12 @@ export default function HeroSection() {
         {/* Header */}
 
         <div className="text-center mb-12 spine-text-area">
-          <h1 className="text-4xl font-bold text-primary mb-4">
-            Bitcoin vs Real Estate Strategy
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 rounded-xl bg-orange-500/10 text-orange-600">
+              <ChartLineUp size={32} weight="duotone" />
+            </div>
+            <h1 className="text-4xl font-bold text-primary">Bitcoin vs Real Estate Strategy</h1>
+          </div>
           <p className="text-lg text-secondary max-w-2xl mx-auto">
             Compare holding Bitcoin against buying a house or renting forever.
             Make informed financial decisions with data-driven projections.
@@ -63,7 +66,7 @@ export default function HeroSection() {
         {/* Primary Inputs */}
         <div className="relative z-10 bg-surface-1 rounded-2xl border border-default shadow-lg p-8">
           <h2 className="text-xl font-semibold text-primary mb-6 flex items-center gap-3">
-            <span className="p-2 rounded-lg bg-brand/10 text-brand">
+            <span className="p-2 rounded-lg bg-orange-500/10 text-orange-600">
               <Coins size={24} weight="duotone" />
             </span>
             Start Your Analysis
@@ -109,7 +112,7 @@ export default function HeroSection() {
 
                 <div className="p-3 rounded-lg bg-surface-3 border border-subtle">
                   <div className="text-xs text-muted mb-1">Current Value</div>
-                  <div className="text-lg font-bold text-brand">{formatCurrencyFull(currentValue)}</div>
+                  <div className="text-lg font-bold text-orange-600">{formatCurrencyFull(currentValue)}</div>
                 </div>
 
                 {err && (
@@ -176,7 +179,7 @@ export default function HeroSection() {
                     min="1"
                     max="30"
                     step="1"
-                    className="w-full h-3 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
+                    className="hero-slider w-full cursor-pointer"
                     value={timeframeYears}
                     onChange={(e) => setState({ timeframeYears: parseInt(e.target.value, 10) })}
                   />
@@ -216,7 +219,7 @@ export default function HeroSection() {
                     min="50"
                     max="150"
                     step="5"
-                    className="w-full h-3 bg-surface-3 rounded-lg appearance-none cursor-pointer slider"
+                    className="hero-slider w-full cursor-pointer"
                     value={Math.round(modelConfidence * 100)}
                     onChange={(e) => setState({ modelConfidence: parseInt(e.target.value, 10) / 100 })}
                   />
@@ -227,7 +230,7 @@ export default function HeroSection() {
                 </div>
 
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-brand">{Math.round(modelConfidence * 100)}%</div>
+                  <div className="text-2xl font-bold text-orange-600">{Math.round(modelConfidence * 100)}%</div>
                   <div className="text-sm text-muted">confidence</div>
                 </div>
 
@@ -246,7 +249,7 @@ export default function HeroSection() {
           <div className="mt-8 pt-6 border-t border-subtle">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
               <div className="p-4 rounded-lg bg-surface-2">
-                <div className="text-2xl font-bold text-brand mb-1">{btcAmount.toFixed(3)}</div>
+                <div className="text-2xl font-bold text-orange-600 mb-1">{btcAmount.toFixed(3)}</div>
                 <div className="text-sm text-muted">Bitcoin Holdings</div>
               </div>
               <div className="p-4 rounded-lg bg-surface-2">

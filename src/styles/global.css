@@ -280,6 +280,13 @@ html {
   --strategy-light: #FED7AA;
   --strategy-bg: rgba(247, 147, 26, 0.1);
   --strategy-border: rgba(247, 147, 26, 0.2);
+
+  /* Hero Section - Bitcoin Orange Theme */
+  --hero-primary: #F7931A;
+  --hero-secondary: #EA580C;
+  --hero-light: #FED7AA;
+  --hero-bg: rgba(247, 147, 26, 0.1);
+  --hero-border: rgba(247, 147, 26, 0.2);
 }
 
 /* Purchase section slider styling */
@@ -323,6 +330,49 @@ html {
 .purchase-slider::-moz-range-thumb:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Hero section slider styling */
+.hero-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--surface-3);
+  border-radius: 6px;
+  height: 12px;
+  outline: none;
+}
+
+.hero-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F97316;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+  transition: all 0.2s ease;
+}
+
+.hero-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
+}
+
+.hero-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #F97316;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.3);
+  transition: all 0.2s ease;
+}
+
+.hero-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.4);
 }
 /* Enhanced gradients for sections with smooth transitions */
 .hero-gradient {

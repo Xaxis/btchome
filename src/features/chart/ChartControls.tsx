@@ -27,7 +27,7 @@ export default function ChartControls() {
                   onClick={()=> setState({ chartView: v })}
                   className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 focus-ring ${
                     view === v
-                      ? 'bg-brand text-white shadow-brand'
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                       : 'text-secondary hover:text-primary hover:bg-surface-2'
                   }`}
                 >

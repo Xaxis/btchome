@@ -19,7 +19,7 @@ export default function KPIs() {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {[
-        { label: 'Hold All Bitcoin', value: holdAll, modal: 'hold-bitcoin-info', color: 'text-brand' },
+        { label: 'Hold All Bitcoin', value: holdAll, modal: 'hold-bitcoin-info', color: 'text-orange-600' },
         { label: 'Buy House', value: buyHouse, modal: 'buy-house-info', color: 'text-emerald-600' },
         { label: 'Rent Forever', value: rentForever, modal: 'rent-forever-info', color: 'text-sky-600' },
         { label: 'Opportunity Cost', value: worstDelta, modal: 'opportunity-cost-info', color: 'text-red-600' },

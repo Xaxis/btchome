@@ -42,12 +42,12 @@ export default function StrategyConfigurationPanel() {
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="p-2 rounded-lg bg-brand/10 text-brand">
+            <span className="p-2 rounded-lg bg-orange-500/10 text-orange-600">
               <Gear size={24} weight="duotone" />
             </span>
             <div>
               <h2 className="text-xl font-semibold text-primary mb-1">
-                Configure Your Strategy
+                Advanced Configuration
               </h2>
               <p className="text-secondary text-sm">
                 Fine-tune the parameters for each strategy to match your specific situation and goals.
@@ -82,7 +82,7 @@ export default function StrategyConfigurationPanel() {
                     onClick={() => setActiveSection(section.id)}
                     className={`flex items-center gap-3 px-6 py-4 border-b-2 transition-all duration-200 focus-ring flex-1 min-w-0 relative ${
                       isActive
-                        ? 'border-brand text-brand bg-brand/5'
+                        ? 'border-orange-500 text-orange-600 bg-orange-500/5'
                         : 'border-transparent text-secondary hover:text-primary hover:bg-surface-2'
                     }`}
                   >
@@ -90,7 +90,7 @@ export default function StrategyConfigurationPanel() {
                     <div className="text-left min-w-0">
                       <div className="font-medium truncate">{section.label}</div>
                       <div className={`text-xs truncate ${
-                        isActive ? 'text-brand/70' : 'text-muted'
+                        isActive ? 'text-orange-600/70' : 'text-muted'
                       }`}>
                         {section.description}
                       </div>
